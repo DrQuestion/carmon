@@ -4,12 +4,20 @@
 \name{carmon-package}
 \alias{carmon}
 \alias{carmon-package}
-\title{carmon: What the Package Does (One Line, Title Case)}
+\title{carmon: Copula Aided Reconstruction of Multi-Omics Networks}
 \description{
-What the package does (one paragraph).
+.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/DrQuestion/carmon}
+  \item Report bugs at \url{https://github.com/DrQuestion/carmon/issues}
+}
+
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Alessio Albanese \email{alessio.albanese@wur.nl} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
 
 }
 \keyword{internal}
