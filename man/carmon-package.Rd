@@ -2,11 +2,10 @@
 % Please edit documentation in R/carmon-package.R
 \docType{package}
 \name{carmon-package}
-\alias{carmon}
 \alias{carmon-package}
-\title{carmon: Copula Aided Reconstruction of Multi-Omics Networks}
+\title{carmon: Copula-Aided Reconstruction of Multi-Omics Networks}
 \description{
-.
+Reconstructs networks from multi-omics data sets, harnessing the original probability distribution of the omics layers, through the use of copulas. Use the main function carmon() to perform all the functional steps of the package. These encompass copula-based data transformation, network reconstrution, network analysis, and plot of the results.
 }
 \seealso{
 Useful links:
@@ -17,7 +16,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Alessio Albanese \email{alessio.albanese@wur.nl} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Alessio Albanese \email{alessio.albanese@wur.nl} (\href{https://orcid.org/0000-0003-1783-5613}{ORCID}) [copyright holder]
+
+Authors:
+\itemize{
+  \item Pariya Behrouzi \email{pariya.behrouzi@wur.nl} (\href{https://orcid.org/0000-0001-6762-5433}{ORCID})
+}
 
 }
 \keyword{internal}

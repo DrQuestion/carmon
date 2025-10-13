@@ -1,19 +1,44 @@
 Package: carmon
-Title: Copula Aided Reconstruction of Multi-Omics Networks
-Version: 0.0.0.9000
-Authors@R: 
-    person("Alessio", "Albanese", , "alessio.albanese@wur.nl", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: .
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Title: Copula-Aided Reconstruction of Multi-Omics Networks
+Version: 0.99.0
+Authors@R: c(
+    person("Alessio", "Albanese", , "alessio.albanese@wur.nl", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0003-1783-5613")),
+    person("Pariya", "Behrouzi", , "pariya.behrouzi@wur.nl", role = "aut",
+           comment = c(ORCID = "0000-0001-6762-5433"))
+  )
+Description: Reconstructs networks from multi-omics data sets, harnessing
+    the original probability distribution of the omics layers, through the
+    use of copulas. Use the main function carmon() to perform all the 
+    functional steps of the package. These encompass copula-based data 
+    transformation, network reconstrution, network analysis, and plot of the
+    results.
+License: GPL (>= 2)
+URL: https://github.com/DrQuestion/carmon
+BugReports: https://github.com/DrQuestion/carmon/issues
+Imports: 
+    coglasso (>= 1.0.2.9003),
+    DESeq2,
+    graphics,
+    huge,
+    igraph,
+    Matrix,
+    rlang,
+    stats,
+    utils
+Suggests:
+    BiocStyle,
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: 
-    coglasso
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
-URL: https://github.com/DrQuestion/carmon
-BugReports: https://github.com/DrQuestion/carmon/issues
+Remotes: 
+    DrQuestion/coglasso
+biocViews: NetworkInference, GraphAndNetwork, Transcriptomics, Metabolomics, Epigenetics, Proteomics
+VignetteBuilder: knitr
+Depends: 
+    R (>= 3.5)
+LazyData: true
