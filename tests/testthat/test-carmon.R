@@ -5,8 +5,10 @@ test_that("carmon works", {
   })
   set.seed(42)
   c_obj <- carmon(multi_omics_small, nlambda_w = 3, nlambda_b = 3, nc = 3, verbose = FALSE)
-  expect_equal(c(c_obj$marginals[1], c_obj$sel_icov[15,11], c_obj$sel_index_lw, length(c_obj$report)),
-               c("negative binomial", 0.0414107035728185, 2, 6))
+  expect_equal(
+    c(c_obj$marginals[1], c_obj$sel_icov[15, 11], c_obj$sel_index_lw, length(c_obj$report)),
+    c("negative binomial", 0.0414107035728185, 2, 6)
+  )
 })
 
 test_that("verbosity 2 and 0 work", {

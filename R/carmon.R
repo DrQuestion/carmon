@@ -221,17 +221,20 @@ carmon <- function(layers, ..., p = NULL, omics = NULL, marginals = NULL,
                    scaled_c_measures = TRUE, plot = TRUE,
                    plot_node_labels = TRUE, hide_isolated = TRUE,
                    plot_hot_nodes = TRUE, verbose = 1) {
-
   call <- match.call()
 
-  carmon_obj <- copulize(layers, p = p, omics = omics, marginals = marginals,
-                        noninv_method = noninv_method, copula = copula,
-                        verbose = verbose)
+  carmon_obj <- copulize(layers,
+    p = p, omics = omics, marginals = marginals,
+    noninv_method = noninv_method, copula = copula,
+    verbose = verbose
+  )
 
-  reconstruct_args <- list(layers = carmon_obj$layers, net_method = net_method,
-                           sel_method = sel_method, cor_cutoff = cor_cutoff,
-                           cor_quant = cor_quant,
-                           minimal_output = minimal_output, verbose = verbose)
+  reconstruct_args <- list(
+    layers = carmon_obj$layers, net_method = net_method,
+    sel_method = sel_method, cor_cutoff = cor_cutoff,
+    cor_quant = cor_quant,
+    minimal_output = minimal_output, verbose = verbose
+  )
   reconstruct_args <- c(reconstruct_args, list(...))
 
   carmon_rec <- do.call(reconstruct, reconstruct_args)
@@ -245,9 +248,11 @@ carmon <- function(layers, ..., p = NULL, omics = NULL, marginals = NULL,
   class(carmon_obj) <- "carmon"
 
   if (analyse) {
-    carmon_obj <- compute_centrality(carmon_obj, c_measures,
-                                max_candidates_c_measures, quantile_c_measures,
-                                scaled_c_measures, verbose)
+    carmon_obj <- compute_centrality(
+      carmon_obj, c_measures,
+      max_candidates_c_measures, quantile_c_measures,
+      scaled_c_measures, verbose
+    )
   }
 
   if (plot) {
@@ -269,47 +274,50 @@ carmon <- function(layers, ..., p = NULL, omics = NULL, marginals = NULL,
 #'
 #' @noRd
 #' @export
-print.carmon <- function(x, ...){
+print.carmon <- function(x, ...) {
   carmon_name <- rlang::call_args(match.call())
-  if(!is.null(x$sel_method)) {
+  if (!is.null(x$sel_method)) {
     cat("Carmon network estimated with ", x$net_method, " and selected with ", x$sel_method, ".\n\n", sep = "")
   } else {
     cat("Carmon network estimated with ", x$net_method, " and selected with ", x$sel_method, ".\n\n", sep = "")
   }
   cat("The call was:\n",
-      paste(deparse(x$call), sep = "\n", collapse = "\n"), "\n\n", sep = "")
+    paste(deparse(x$call), sep = "\n", collapse = "\n"), "\n\n",
+    sep = ""
+  )
   cat("******************************************************\n\n")
-  #cat("The model selection method was:\n",
+  # cat("The model selection method was:\n",
   #    x$method, "\n", sep = "")
-  #cat("The density of the selected network is:\n",
+  # cat("The density of the selected network is:\n",
   #    x$sel_density, "\n\n", sep = "")
-  if(length(x$omics) > 2) {
-    mes <- paste(x$omics[seq(1,length(x$omics)-1)], collapse = ", ")
+  if (length(x$omics) > 2) {
+    mes <- paste(x$omics[seq(1, length(x$omics) - 1)], collapse = ", ")
     mes <- paste(mes, ", and ", x$omics[length(x$omics)], sep = "")
   } else {
     mes <- paste(x$omics, collapse = " and ")
   }
-  cat("The network is made of ", length(x$omics), " omics layers: ", mes,".\n", sep = "")
-  cat("It has a total of ", sum(sapply(x$layers, ncol)), " nodes.\n", sep = "")
-  mes = ""
-  for (i in 1:length(x$omics)) {
+  cat("The network is made of ", length(x$omics), " omics layers: ", mes, ".\n", sep = "")
+  cat("It has a total of ", sum(vapply(x$layers, ncol, numeric(1))), " nodes.\n", sep = "")
+  mes <- ""
+  for (i in seq_len(length(x$omics))) {
     layer_name <- x$omics[i]
-    mes_ <- paste("The ", layer_name, " layer has ", ncol(x$layers[[i]]), " nodes; \n    its chosen marginal distribution is the ", x$marginals[i], ".\n", sep ="")
+    mes_ <- paste("The ", layer_name, " layer has ", ncol(x$layers[[i]]), " nodes; \n    its chosen marginal distribution is the ", x$marginals[i], ".\n", sep = "")
     mes <- paste(mes, mes_, sep = "")
   }
   cat(mes)
   cat("\n")
   cat("******************************************************\n\n")
-  if (is.null(x$report)){
+  if (is.null(x$report)) {
     cat("Find central nodes with:\n", carmon_name[[1]], " <- compute_centrality(", carmon_name[[1]], ")\n", sep = "")
     cat("Then p")
   } else {
     cat("P")
   }
   cat("rint a report of the central nodes with:\ncentrality_report(", carmon_name[[1]], ")\n\n",
-      sep = "")
-  cat("Plot a comparison of the central nodes with:\nplot_report(", carmon_name[[1]], ")\n\n", sep ="")
+    sep = ""
+  )
+  cat("Plot a comparison of the central nodes with:\nplot_report(", carmon_name[[1]], ")\n\n", sep = "")
   cat("Plot the carmon network with:\nplot(", carmon_name[[1]], ")\n",
-      sep = "")
-
+    sep = ""
+  )
 }

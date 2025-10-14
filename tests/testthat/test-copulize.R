@@ -12,11 +12,11 @@ test_that("non-tailored marginals work (including verbosity)", {
 
 test_that("hackInf works", {
   copulized <- copulize(multi_omics_micro)
-  max_trp <- max(copulized$layers$metabolomics[,1])
-  min_trp <- min(copulized$layers$metabolomics[,1])
-  copulized$layers$metabolomics[4,1] <- +Inf
-  copulized$layers$metabolomics[3,1] <- -Inf
+  max_trp <- max(copulized$layers$metabolomics[, 1])
+  min_trp <- min(copulized$layers$metabolomics[, 1])
+  copulized$layers$metabolomics[4, 1] <- +Inf
+  copulized$layers$metabolomics[3, 1] <- -Inf
   copulized$layers$metabolomics <- hackInf(copulized$layers$metabolomics)
-  expect_equal(max_trp, max(copulized$layers$metabolomics[,1])-2)
-  expect_equal(min_trp, min(copulized$layers$metabolomics[,1])+2)
+  expect_equal(max_trp, max(copulized$layers$metabolomics[, 1]) - 2)
+  expect_equal(min_trp, min(copulized$layers$metabolomics[, 1]) + 2)
 })

@@ -3,9 +3,15 @@ test_that("highlighting multiple central nodes works", {
 })
 
 test_that("empty network warnings work for both plot functions", {
-  expect_warning(c_obj <- carmon(multi_omics, net_method = "correlation",
-                        cor_cutoff = 0.9999, verbose = FALSE, analyse = FALSE),
-                 "The reconstructed network is empty, it cannot be plotted.")
-  expect_warning(plot_report(c_obj),
-                 "The reconstructed network is empty, cannot plot the results of the centrality analysis.")
+  expect_warning(
+    c_obj <- carmon(multi_omics,
+      net_method = "correlation",
+      cor_cutoff = 0.9999, verbose = FALSE, analyse = FALSE
+    ),
+    "The reconstructed network is empty, it cannot be plotted."
+  )
+  expect_warning(
+    plot_report(c_obj),
+    "The reconstructed network is empty, cannot plot the results of the centrality analysis."
+  )
 })

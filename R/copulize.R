@@ -88,8 +88,8 @@ copulize <- function(layers, p = NULL, omics = NULL, marginals = NULL,
     layers <- check_layers_dims(layers)
     # Check consistency of layer number across arguments
     check_layers_num(layers = layers, omics = omics, marginals = marginals)
-  } else if (!is.null(dim(layers))){ # layers is a matrix, table or data.frame
-    if (is.null(p)){
+  } else if (!is.null(dim(layers))) { # layers is a matrix, table or data.frame
+    if (is.null(p)) {
       stop("When the multi-omics data set is given as a single matrix, please provide the number of features in each layer through the argument p.")
     } else {
       if (sum(p) != ncol(layers)) { # Assume that dimensions of the last layer are not specified
@@ -116,7 +116,7 @@ copulize <- function(layers, p = NULL, omics = NULL, marginals = NULL,
     marginals <- rep(0, length(layers))
   }
   if (is.null(omics)) {
-    if(check_omics(names(layers), marginals)) {
+    if (check_omics(names(layers), marginals)) {
       omics <- names(layers)
     } else {
       omics <- rep("other", length(layers))
@@ -138,9 +138,9 @@ copulize <- function(layers, p = NULL, omics = NULL, marginals = NULL,
     flush.console()
   }
 
-  for (l in 1:length(layers)) {
+  for (l in seq_len(length(layers))) {
     if (verbose) {
-      mes <- paste(c("Copulizing layer ", l, " of ", length(layers), " (", omics[l], ")"), sep ="")
+      mes <- paste(c("Copulizing layer ", l, " of ", length(layers), " (", omics[l], ")"), sep = "")
       cat(mes, "\r")
       cat("\n")
     }
@@ -176,24 +176,24 @@ copulize <- function(layers, p = NULL, omics = NULL, marginals = NULL,
         cat(mes, "\r")
         cat("\n")
       }
-#     } else if (tolower(marginals[l]) %in% c("bb", "beta binomial")) {
-#       if (verbose > 1) {
-#         mes <- "Using beta binomial marginals...."
-#         cat(mes, "\r")
-#       }
-#       marginals[l] <- "beta binomial"
-#       # The methylation layer expects a list of two matrices, the methylated
-#       # counts and the site coverage
-#       layers[[l]] <- bb_m_copulizer(layers[[l]],
-#         design_matrix = NULL,
-#         design_formula = NULL,
-#         noninv_method = noninv_method, copula = copula
-#       )
-#       if (verbose > 1) {
-#         mes <- "Using beta binomial marginals....done"
-#         cat(mes, "\r")
-#         cat("\n")
-#       }
+      #     } else if (tolower(marginals[l]) %in% c("bb", "beta binomial")) {
+      #       if (verbose > 1) {
+      #         mes <- "Using beta binomial marginals...."
+      #         cat(mes, "\r")
+      #       }
+      #       marginals[l] <- "beta binomial"
+      #       # The methylation layer expects a list of two matrices, the methylated
+      #       # counts and the site coverage
+      #       layers[[l]] <- bb_m_copulizer(layers[[l]],
+      #         design_matrix = NULL,
+      #         design_formula = NULL,
+      #         noninv_method = noninv_method, copula = copula
+      #       )
+      #       if (verbose > 1) {
+      #         mes <- "Using beta binomial marginals....done"
+      #         cat(mes, "\r")
+      #         cat("\n")
+      #       }
     } else if (tolower(marginals[l]) %in% c("ln", "lognormal")) {
       if (verbose > 1) {
         mes <- "Using log-normal marginals...."
@@ -250,12 +250,12 @@ copulize <- function(layers, p = NULL, omics = NULL, marginals = NULL,
 #'
 #' @noRd
 omics2marginals <- function(omics, marginals) {
-  for (l in 1:length(omics)) {
+  for (l in seq_len(length(omics))) {
     if (marginals[l] == 0) {
       if (tolower(omics[l]) %in% c("rna-seq", "rnaseq", "gene counts", "transcriptomics", "proteomics", "protein fragments", "protein counts")) {
         marginals[l] <- "nb"
-#       } else if (tolower(omics[l]) %in% c("bs-seq", "bsseq", "wgbs", "methylomics")) {
-#         marginals[l] <- "bb"
+        #       } else if (tolower(omics[l]) %in% c("bs-seq", "bsseq", "wgbs", "methylomics")) {
+        #         marginals[l] <- "bb"
       } else if (tolower(omics[l]) %in% c("metabolomics", "lc-ms", "gc-ms", "ms")) {
         marginals[l] <- "ln"
       } else {
@@ -289,13 +289,14 @@ nb_m_copulizer <- function(layer, design_matrix = NULL,
                            copula = NULL) {
   if (is.null(design_matrix)) {
     dds <- suppressMessages(DESeq2::DESeqDataSetFromMatrix(t(round(layer)),
-                                          colData = data.frame(row.names(layer)),
-                                          design = ~1))
+      colData = data.frame(row.names(layer)),
+      design = ~1
+    ))
   } else {
     # How to change to keep into account covariates/confounders?
     dds <- DESeq2::DESeqDataSetFromMatrix(t(round(layer)),
-                                          colData = design_matrix,
-                                          design = design_formula
+      colData = design_matrix,
+      design = design_formula
     )
   }
   dds <- DESeq2::estimateSizeFactors(dds, quiet = TRUE)
@@ -303,8 +304,8 @@ nb_m_copulizer <- function(layer, design_matrix = NULL,
   means <- t(dds@assays@data$mu)
   dispersions <- DESeq2::dispersions(dds)
   if (noninv_method == "median") {
-    median_probabilities <- (stats::pnbinom(t(layer - 1), mu = t(means), size = 1/dispersions) +
-                               stats::pnbinom(t(layer), mu = t(means), size = 1/dispersions)) / 2
+    median_probabilities <- (stats::pnbinom(t(layer - 1), mu = t(means), size = 1 / dispersions) +
+      stats::pnbinom(t(layer), mu = t(means), size = 1 / dispersions)) / 2
     if (copula == "gaussian") {
       layer <- t(stats::qnorm(median_probabilities))
     }
@@ -323,7 +324,7 @@ nb_m_copulizer <- function(layer, design_matrix = NULL,
 #'
 #' @noRd
 e_m_copulizer <- function(layer, noninv_method = NULL, copula = NULL) {
-  for (j in 1:ncol(layer)) {
+  for (j in seq_len(ncol(layer))) {
     empirical_cdf <- stats::ecdf(layer[, j])
     if (noninv_method == "median") {
       median_probabilities <- (empirical_cdf(layer[, j] -
@@ -353,7 +354,7 @@ ln_m_copulizer <- function(layer, design_matrix = NULL,
   # Implement DESeq2-like normalization and variance shrinkage estimation, for
   # small number of replicates give biased MLE estimates of the variance
 
-  infinites <- which(is.infinite(layer), arr.ind = T)
+  infinites <- which(is.infinite(layer), arr.ind = TRUE)
   layer[infinites] <- NA
 
   if (is.null(design_matrix)) {
@@ -391,7 +392,7 @@ n_m_copulizer <- function(layer, design_matrix = NULL,
   # Implement DESeq2-like normalization and variance shrinkage estimation, for
   # small number of replicates give biased MLE estimates of the variance
 
-  infinites <- which(is.infinite(layer), arr.ind = T)
+  infinites <- which(is.infinite(layer), arr.ind = TRUE)
   layer[infinites] <- NA
 
   if (is.null(design_matrix)) {

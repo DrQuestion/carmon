@@ -51,8 +51,10 @@
 #' @examples
 #' # compute_centrality() needs an object of S3 class "carmon" as an input. The
 #' # following line quickly obtains one.
-#' c_obj <- carmon(multi_omics_small, net_method = "correlation",
-#'                 cor_quant = 0.25, analysis = FALSE, verbose = FALSE)
+#' c_obj <- carmon(multi_omics_small,
+#'   net_method = "correlation",
+#'   cor_quant = 0.25, analysis = FALSE, verbose = FALSE
+#' )
 #' # Then to perform the consensus centrality analysis:
 #' c_obj <- compute_centrality(c_obj)
 #'
@@ -89,7 +91,7 @@ compute_centrality <- function(carmon_obj, measures = "dbce", max_candidates = N
 
     all_measures <- vector(mode = "list", length = nchar(measures))
 
-    for (i in 1:nchar(measures)) {
+    for (i in seq_len(nchar(measures))) {
       all_measures[[i]] <- rep(0, n_candidates)
       m <- substr(measures, i, i)
       if (m == "d") {
@@ -202,9 +204,9 @@ compute_centrality <- function(carmon_obj, measures = "dbce", max_candidates = N
         all_measures[[i]] <- eigenvector_top
         names(all_measures[[i]]) <- eigenvector_names
       }
-      if(length(all_measures[[i]]) == 0) {
+      if (length(all_measures[[i]]) == 0) {
         no_node_found[i] <- 1
-        if(verbose) {
+        if (verbose) {
           cat("No node was found to be central for ", names(all_measures)[i], ".\n", sep = "")
         }
       }
@@ -238,7 +240,7 @@ compute_centrality <- function(carmon_obj, measures = "dbce", max_candidates = N
 
   all_candidates <- unique(unlist(lapply(all_measures, names)))
   report <- matrix(0, nrow = length(all_candidates), ncol = 8)
-  for (i in 1:length(all_candidates)) {
+  for (i in seq_len(length(all_candidates))) {
     candidate <- all_candidates[i]
     report[i, 1] <- all_candidates[i]
 
@@ -329,15 +331,17 @@ compute_centrality <- function(carmon_obj, measures = "dbce", max_candidates = N
 #'
 #' @examples
 #' # Let's build and analyse a carmon network:
-#' c_obj <- carmon(multi_omics_small, net_method = "correlation",
-#'                 cor_quant = 0.25, analysis = TRUE, plot = FALSE,
-#'                 # analysis is already TRUE by default
-#'                 verbose = FALSE)
+#' c_obj <- carmon(multi_omics_small,
+#'   net_method = "correlation",
+#'   cor_quant = 0.25, analysis = TRUE, plot = FALSE,
+#'   # analysis is already TRUE by default
+#'   verbose = FALSE
+#' )
 #' # To display the table of the results of the centrality analysis:
 #' centrality_report(c_obj)
 #'
 centrality_report <- function(carmon_obj) {
-  if(is.null(carmon_obj$report)) {
+  if (is.null(carmon_obj$report)) {
     warning("The centrality report was not compiled yet. \nCompiling it now, but it will not be saved in the carmon object.")
     carmon_obj <- compute_centrality(carmon_obj)
   }

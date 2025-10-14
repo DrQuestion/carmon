@@ -10,16 +10,16 @@
 #'
 #' @noRd
 check_layers_dims <- function(layers) {
-  if (length(unique(sapply(layers, nrow))) == 1) {
+  if (length(unique(vapply(layers, nrow, numeric(1)))) == 1) {
     ref_names <- rownames(layers[[1]])
     all_same_names <- all(
-      sapply(layers, function(l) setequal(rownames(l), ref_names))
+      vapply(layers, function(l) setequal(rownames(l), ref_names), logical(1))
     )
     if (!all_same_names) {
       stop("Samples should be along rows and they must share the same names across layers.")
     } else {
       same_order <- all(
-        sapply(layers, function(l) identical(rownames(l), ref_names))
+        vapply(layers, function(l) identical(rownames(l), ref_names), logical(1))
       )
       if (same_order) {
         return(layers)
@@ -27,17 +27,17 @@ check_layers_dims <- function(layers) {
         return(lapply(layers, function(l) l[ref_names, , drop = FALSE]))
       }
     }
-  } else if (length(unique(sapply(layers, ncol))) == 1) {
+  } else if (length(unique(vapply(layers, ncol, numeric(1)))) == 1) {
     ref_names <- colnames(layers[[1]])
     all_same_names <- all(
-      sapply(layers, function(l) setequal(colnames(l), ref_names))
+      vapply(layers, function(l) setequal(colnames(l), ref_names), logical(1))
     )
     if (!all_same_names) {
       stop("Samples should be along rows and they must share the same names across layers.")
     } else {
       warning("The samples will be assumed to be distributed along the columns of the layers. Please, next time arrange them along rows.")
       same_order <- all(
-        sapply(layers, function(l) identical(colnames(l), ref_names))
+        vapply(layers, function(l) identical(colnames(l), ref_names), logical(1))
       )
       if (same_order) {
         return(lapply(layers, t))
@@ -64,11 +64,11 @@ check_layers_dims <- function(layers) {
 #' @return It returns nothing, but it raises an error if the check fails.
 #'
 #' @noRd
-check_layers_num <- function (layers = NULL, p = NULL, omics = NULL, marginals = NULL) {
+check_layers_num <- function(layers = NULL, p = NULL, omics = NULL, marginals = NULL) {
   # Function checking that number of layers is consistent across arguments
   input <- list(layers = layers, p = p, omics = omics, marginals = marginals)
-  non_null <- input[!sapply(input, is.null)]
-  if (length(unique(sapply(non_null, length))) != 1) {
+  non_null <- input[!vapply(input, is.null, logical(1))]
+  if (length(unique(vapply(non_null, length, numeric(1)))) != 1) {
     lengths <- lapply(non_null, length)
     print(lengths)
     stop("Number of layers is inconsistent across input parameters. Please check your input.")
@@ -119,12 +119,14 @@ split_layers <- function(layers, p, omics = NULL) {
 #'
 #' @noRd
 check_omics <- function(omics, marginals) {
-  admitted_omics <- c("rna-seq", "rnaseq", "gene counts", "transcriptomics",
-                      "proteomics", "protein fragments", "protein counts",
-#                       "bs-seq", "bsseq", "wgbs", "methylomics",
-                      "metabolomics", "lc-ms", "gc-ms", "ms")
-  if(any(!(omics %in% admitted_omics))){
-    if(all(marginals == 0)) {
+  admitted_omics <- c(
+    "rna-seq", "rnaseq", "gene counts", "transcriptomics",
+    "proteomics", "protein fragments", "protein counts",
+    #                       "bs-seq", "bsseq", "wgbs", "methylomics",
+    "metabolomics", "lc-ms", "gc-ms", "ms"
+  )
+  if (any(!(omics %in% admitted_omics))) {
+    if (all(marginals == 0)) {
       warning("Some omics provided are not supported by carmon.\n
               Check which_omics() for a list of supported omics technologies.\n
               In this run their marginal distributions will be modelled with\n
@@ -152,17 +154,17 @@ check_layers_names <- function(layers, omics) {
   layer_names <- omics
   if (length(unique(layer_names)) < length(layer_names)) {
     # There are multiple layers of the same omics type
-    for (i in 1:length(layer_names)) {
+    for (i in seq_len(length(layer_names))) {
       if (duplicated(layer_names)[i]) {
         omic <- layer_names[i]
         same <- layer_names[which(layer_names == omic)]
-        same <- paste(same, LETTERS[1:length(same)], sep = "_")
+        same <- paste(same, LETTERS[seq_len(length(same))], sep = "_")
         layer_names[which(layer_names == omic)] <- same
       }
     }
   }
-  for (i in 1:length(layers)) {
-    if(is.null(names(layers)[i])){
+  for (i in seq_len(length(layers))) {
+    if (is.null(names(layers)[i])) {
       names(layers)[i] <- layer_names[i]
     } else if (is.na(names(layers)[i])) {
       names(layers)[i] <- layer_names[i]
@@ -182,10 +184,11 @@ check_layers_names <- function(layers, omics) {
 #'
 #' @noRd
 check_gen_colnames <- function(layers) {
-  for (i in 1:length(layers)) {
+  for (i in seq_len(length(layers))) {
     if (is.null(colnames(layers[[i]]))) {
-      colnames(layers[[i]]) <- paste(names(layers)[i], seq(1:ncol(layers[[i]])),
-                                     sep = "_")
+      colnames(layers[[i]]) <- paste(names(layers)[i], seq(1, ncol(layers[[i]])),
+        sep = "_"
+      )
     }
   }
   return(layers)
@@ -220,7 +223,7 @@ filter_args <- function(fun, dots) {
 #' @noRd
 merge_layers <- function(layers) {
   # Make a single data set out of layers list
-  if (length(unique(sapply(layers, nrow))) == 1) {
+  if (length(unique(vapply(layers, nrow, numeric(1)))) == 1) {
     layers <- do.call(cbind, layers)
   } else {
     layers <- t(do.call(rbind, layers))
@@ -286,15 +289,16 @@ which_marginals <- function() {
 #' @export
 #'
 #' @examples
-#' c_obj <- carmon(multi_omics_small, net_method = "correlation",
-#'                 cor_quant = 0.25, analysis = FALSE, plot = FALSE,
-#'                 verbose = FALSE)
+#' c_obj <- carmon(multi_omics_small,
+#'   net_method = "correlation",
+#'   cor_quant = 0.25, analysis = FALSE, plot = FALSE,
+#'   verbose = FALSE
+#' )
 #' network <- get_network(c_obj)
 #'
 get_network <- function(carmon_obj, labels = NULL) {
-
   network <- igraph::graph_from_adjacency_matrix(carmon_obj$sel_adj, mode = "max")
-  if (!inherits(carmon_obj, "carmon_rec")){
+  if (!inherits(carmon_obj, "carmon_rec")) {
     igraph::V(network)$label <- unlist(lapply(carmon_obj$layers, colnames))
   } else if (!is.null(labels)) {
     igraph::V(network)$label <- labels
@@ -321,17 +325,17 @@ get_network <- function(carmon_obj, labels = NULL) {
 #'
 #' @noRd
 #'
-get_edge_weights <- function(carmon_obj){
-  if(carmon_obj$net_method %in% c("coglasso", "glasso")){
+get_edge_weights <- function(carmon_obj) {
+  if (carmon_obj$net_method %in% c("coglasso", "glasso")) {
     weights <- stats::cov2cor(carmon_obj$sel_icov)
     weights <- -weights
     diag(weights) <- 1
-  } else if (carmon_obj$net_method == "correlation"){
+  } else if (carmon_obj$net_method == "correlation") {
     weights <- carmon_obj$cor
     weights[which(carmon_obj$sel_adj == 0, arr.ind = TRUE)] <- 0
     diag(weights) <- 1
   } else {
-    #method is mb
+    # method is mb
     weights <- matrix(data = 1, nrow = ncol(carmon_obj$sel_adj), ncol = ncol(carmon_obj$sel_adj))
     weights[Matrix::which(carmon_obj$sel_adj == 0, arr.ind = TRUE)] <- 0
     diag(weights) <- 1
@@ -358,8 +362,9 @@ get_edge_weights <- function(carmon_obj){
 #' @examples
 #' carmon_cop_obj <- copulize(multi_omics_micro, verbose = FALSE)
 #' carmon_rec_obj <- reconstruct(carmon_cop_obj$layers,
-#'                               net_method = "correlation",
-#'                               cor_quant = 0.5, verbose = FALSE)
+#'   net_method = "correlation",
+#'   cor_quant = 0.5, verbose = FALSE
+#' )
 #' carmon_obj <- assemble_carmon_obj(carmon_cop_obj, carmon_rec_obj)
 #'
 assemble_carmon_obj <- function(carmon_cop, carmon_rec) {

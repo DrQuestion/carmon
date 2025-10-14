@@ -128,18 +128,18 @@ Please note that also the plotting module can be turned off by setting the argum
 In this run, we customize the default behavior of `carmon()` with the information provided above, this time reconstructing the network from the largest data set provided by the package, `multi_omics`. We will will use alternative marginals for the RNA-seq layer, keeping the default for the metabolomic layer. We will use the omics features in the normal-realm to build a network with Pearson's correlation, selecting only the top 5% connections. We will perform the consensus centrality analysis with all four measures, but we will select the top 2% for each measure to select the candidates for consensus. Moreover, we will hide the name of those nodes that are not found to be central. Finally, we will inspect the result of the consensus centrality analysis.
 
 ```{r custom run, warning=FALSE}
-
 str(multi_omics) # 162 genes, 76 metabolites, for 30 observations
 
 c_obj <- carmon(multi_omics,
-                marginals = c("e", 0), # Sets the empirical marginal distribution
-                                       # for the first layer, and the default 
-                                       #distribution for the second
-                net_method = "correlation", # Selecting Pearson's correlation
-                cor_quant = 0.05, # Selecting the top 5% of connections
-                quantile_c_measures = 0.02, # Top 2% of the candidates 
-                                            # to determine consensus of centrality
-                plot_node_labels = FALSE)
+  marginals = c("e", 0), # Sets the empirical marginal distribution
+  # for the first layer, and the default
+  # distribution for the second
+  net_method = "correlation", # Selecting Pearson's correlation
+  cor_quant = 0.05, # Selecting the top 5% of connections
+  quantile_c_measures = 0.02, # Top 2% of the candidates
+  # to determine consensus of centrality
+  plot_node_labels = FALSE
+)
 
 centrality_report(c_obj)
 ```
@@ -158,3 +158,9 @@ Friedman, J., Hastie, T., & Tibshirani, R. (2008). Sparse inverse covariance est
 Meinshausen, N., & Buhlmann, P. (2006). High-dimensional graphs and variable selection with the Lasso. *Ann. Statist.*, 34(3), 1436-1462. <https://doi.org/10.1214/009053606000000281>
 
 Liu, H., Roeder, K., & Wasserman, L. (2010). Stability Approach to Regularization Selection (StARS) for High Dimensional Graphical Models (arXiv:1006.3316). *arXiv* <https://doi.org/10.48550/arXiv.1006.3316>
+
+## Session Info
+
+``` {r session info}
+sessionInfo()
+```

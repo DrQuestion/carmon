@@ -102,8 +102,10 @@
 #' # the input data with copulize(), then provide the normally distributed
 #' # omics layers to reconstruct().
 #' copulized <- copulize(multi_omics_micro)
-#' rec <-  reconstruct(copulized$layers, net_method = "correlation",
-#'   cor_quant = 0.5, verbose = FALSE)
+#' rec <- reconstruct(copulized$layers,
+#'   net_method = "correlation",
+#'   cor_quant = 0.5, verbose = FALSE
+#' )
 #'
 #' # To make a carmon object out of these two:
 #' c_obj <- assemble_carmon_obj(copulized, rec)
@@ -115,10 +117,10 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
   # SHALL I STRIP DOWN THE OUTPUT TO THE STRICT ESSENTIALS?
   call <- match.call()
 
-  p <- sapply(layers, ncol)
+  p <- vapply(layers, ncol, numeric(1))
 
   verbose_inner <- FALSE
-  if(verbose > 1){
+  if (verbose > 1) {
     verbose_inner <- TRUE
   }
   if (verbose) {
@@ -130,7 +132,7 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
   if (net_method == "coglasso") {
     if (is.null(sel_method)) {
       sel_method <- "xestars"
-    } else if ("method" %in% names(list(...))){
+    } else if ("method" %in% names(list(...))) {
       warning("Selection method was provided twice: as sel_method and as method. sel_method will overwrite method")
     }
     if (!(sel_method %in% c("xstars", "xestars", "ebic"))) {
@@ -168,7 +170,7 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
     } else if (is.null(sel_method) && "criterion" %in% names(list(...))) {
       args <- list(...)
       sel_method <- args$criterion
-    } else if ("criterion" %in% names(list(...))){
+    } else if ("criterion" %in% names(list(...))) {
       warning("Selection method was provided twice: as sel_method and as criterion. sel_method will overwrite criterion")
     }
     if (!(sel_method %in% c("stars", "ric", "ebic"))) {
@@ -210,7 +212,7 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
       } else if (is.null(sel_method) && "criterion" %in% names(list(...))) {
         args <- list(...)
         sel_method <- args$criterion
-      } else if ("criterion" %in% names(list(...))){
+      } else if ("criterion" %in% names(list(...))) {
         warning("Selection method was provided twice: as sel_method and as criterion. sel_method will overwrite criterion")
       }
       if (!(sel_method %in% c("stars", "ric"))) {
@@ -268,7 +270,7 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
       }
       above_cutoff <- which(abs(rec$sel_adj) >= cor_cutoff)
       rec$sel_adj[above_cutoff] <- 1
-      rec$sel_adj[rec$sel_adj!=1] <- 0
+      rec$sel_adj[rec$sel_adj != 1] <- 0
       if (verbose) {
         cat("Reconstructing network with Pearson's correlation....done")
         cat("\n")
@@ -281,7 +283,7 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
     } else if (is.null(sel_method) && "criterion" %in% names(list(...))) {
       args <- list(...)
       sel_method <- args$criterion
-    } else if ("criterion" %in% names(list(...))){
+    } else if ("criterion" %in% names(list(...))) {
       warning("Selection method was provided twice: as sel_method and as criterion. sel_method will overwrite criterion")
     }
     if (!(sel_method %in% c("stars", "ric"))) {
@@ -339,89 +341,87 @@ reconstruct <- function(layers, net_method = "coglasso", sel_method = NULL, ...,
 }
 
 # DEVELOP: ####
-#A MAKE FUNCTION THAT CHECKS THAT NUMBER OF LAYERS IS CONSTISTENT ACROSS layers,
+# A MAKE FUNCTION THAT CHECKS THAT NUMBER OF LAYERS IS CONSTISTENT ACROSS layers,
 #  p, omics AND marginals                                                       X
-#A ADJUST COPULIZE TO ACCEPT DATAFRAMES/TABLES/MATRIXES                         X
-#A FINISH WRITING THE ELLIPSIS MENAGEMENT                                       X
-#A ADD AN MB OPTION                                                             X
-#A FINALIZE THE RECONSTRUCT FUNCTION                                            X
-#A EXTRACT NETWORK FUNCTION                                                     X
-#A PLOT FUNCTION                                                                X
-#A ADJUST GET NETWORK FUNCTION TO MISSING COL NAMES AND WRONG CLASSES           X
-#A MODIFY PLOT TO ACCEPT OMICS INFO FOR LEGEND                                  X
-#A MATCH CALL FOR CARMON() FUNCTION                                             X
-#A MANAGE VERBOSE FOR CARMON() FUNCTION, DECIDE WHETHER TO PRINT STATUS MESSAGES
+# A ADJUST COPULIZE TO ACCEPT DATAFRAMES/TABLES/MATRIXES                         X
+# A FINISH WRITING THE ELLIPSIS MENAGEMENT                                       X
+# A ADD AN MB OPTION                                                             X
+# A FINALIZE THE RECONSTRUCT FUNCTION                                            X
+# A EXTRACT NETWORK FUNCTION                                                     X
+# A PLOT FUNCTION                                                                X
+# A ADJUST GET NETWORK FUNCTION TO MISSING COL NAMES AND WRONG CLASSES           X
+# A MODIFY PLOT TO ACCEPT OMICS INFO FOR LEGEND                                  X
+# A MATCH CALL FOR CARMON() FUNCTION                                             X
+# A MANAGE VERBOSE FOR CARMON() FUNCTION, DECIDE WHETHER TO PRINT STATUS MESSAGES
 #  OR NOT. Verbose levels?                                                      X
-#A START REASONING ON BASIC NETWORK ANALYSIS MODULES, ONCE NETWORKS ARE OBTAINEDX
-#A PLOT OF REPORT, BARS OF SAME COLOR AS NETWORK NODES, FILLS AND FRAMES        X
-#A MODIFY PLOT TO DISPLAY HOT NODES RESULTING FROM THE ANALYSIS                 X
-#A ADJUST VERBOSE COGLASSO X(E)STARS ETC.                                       X
-#A MAKE SEPARATE FUNCTION CENTRALITY REPORT TO EXTRACT THE REPORT IN TABLE
+# A START REASONING ON BASIC NETWORK ANALYSIS MODULES, ONCE NETWORKS ARE OBTAINEDX
+# A PLOT OF REPORT, BARS OF SAME COLOR AS NETWORK NODES, FILLS AND FRAMES        X
+# A MODIFY PLOT TO DISPLAY HOT NODES RESULTING FROM THE ANALYSIS                 X
+# A ADJUST VERBOSE COGLASSO X(E)STARS ETC.                                       X
+# A MAKE SEPARATE FUNCTION CENTRALITY REPORT TO EXTRACT THE REPORT IN TABLE
 #  FORMAT, ALSO TO BE USED SEPARATELY ON A CARMON OBJECT                        X
-#A SOLVE MISTERY OF PLOT_REPORT.CARMON --> WHY NOT A METHOD?                    X
-#A WRAPPING FUNCTION FOR COPULIZE + RECONSTRUCT + GET_NETWORK + ANALYZE
+# A SOLVE MISTERY OF PLOT_REPORT.CARMON --> WHY NOT A METHOD?                    X
+# A WRAPPING FUNCTION FOR COPULIZE + RECONSTRUCT + GET_NETWORK + ANALYZE
 #  (optional) + PLOT(optional)                                                  X
-#A PRINT FUNCTION LIKE COGLASSO, SEPARATE BY ASTERISKS                          x
-#A CHECK IF YOU CAN SET PAR() IN AN R PACKAGE CHANGING GLOBAL PARAMS            X
-#A ADD WEIGHTS TO PLOT NETWORK                                                  X
-#A CHECK INTEGRITY OF INFORMATION FLOW AMONG FUNCTIONS OF THE PACKAGE (E.G.
+# A PRINT FUNCTION LIKE COGLASSO, SEPARATE BY ASTERISKS                          x
+# A CHECK IF YOU CAN SET PAR() IN AN R PACKAGE CHANGING GLOBAL PARAMS            X
+# A ADD WEIGHTS TO PLOT NETWORK                                                  X
+# A CHECK INTEGRITY OF INFORMATION FLOW AMONG FUNCTIONS OF THE PACKAGE (E.G.
 #  LAYERS AS LIST/DATAFRAME, BUT THERE MUST BE MORE. IMAGINE THE FLOW BEGINNING
 #  TO END.)                                                                     X
-#A QUARTILE EDGE TYPE                                                           X
-#A PLOT() WITH SAME LAYOUT BUT WEIGHED -> CHECK IF STILL MESSY                  X
-#A MAKE DATA FOR TESTING AND EXAMPLES                                           X
-#A MAKE AN IMAGE() METHOD
-#A CHANGE PRINT MESSAGE TO ALLOCATE PARAMETERS COMBINATIONS AND THE ONES
+# A QUARTILE EDGE TYPE                                                           X
+# A PLOT() WITH SAME LAYOUT BUT WEIGHED -> CHECK IF STILL MESSY                  X
+# A MAKE DATA FOR TESTING AND EXAMPLES                                           X
+# A MAKE AN IMAGE() METHOD
+# A CHANGE PRINT MESSAGE TO ALLOCATE PARAMETERS COMBINATIONS AND THE ONES
 #  SELECTED
-#A COGLASSO: CORRECT DESCRIPTION MESSAGE
-#A COGLASSO: CHECK THAT PLOTTING MODULE BEHAVES CORRECTLY WITH WEIGHTS
-#A COGLASSO: RELEASE 2.0 FOR ALLOWING OFFICIAL ACCESS TO CARMON
-#A UPDATE AND RELEASE COGLASSO
+# A COGLASSO: CORRECT DESCRIPTION MESSAGE
+# A COGLASSO: CHECK THAT PLOTTING MODULE BEHAVES CORRECTLY WITH WEIGHTS
+# A COGLASSO: RELEASE 2.0 FOR ALLOWING OFFICIAL ACCESS TO CARMON
+# A UPDATE AND RELEASE COGLASSO
 #
 #
-#B INVERT FINE-GRAINED - COARSE DIRECTION OF LAMBDA GENERATION FOR COGLASSO. WE
+# B INVERT FINE-GRAINED - COARSE DIRECTION OF LAMBDA GENERATION FOR COGLASSO. WE
 #  END UP SELECTING SPARSE ANYWAYS, WE MIGHT AS WELL EXPLORE THERE MORE,
 #  ESPECIALLY FOR SMALLER NETWORKS.                                             X
-#B FINISH IMPLEMENTING THE METHYLOME INTEGRATION SUITE (carmon_future)
-#B CHECK THAT COPULIZED METHYLATION DATA ARE STANDARD NORMAL!!!! THERE MIGHT BE
+# B FINISH IMPLEMENTING THE METHYLOME INTEGRATION SUITE (carmon_future)
+# B CHECK THAT COPULIZED METHYLATION DATA ARE STANDARD NORMAL!!!! THERE MIGHT BE
 #  ISSUES OF DIMENSIONS AND PARAMETERS!!!
-#B STABILITY TO MEASURE ACCURACY OF CENTRALITY MEASURE
-#B Create internal data structure that contains omics list, access it internally
+# B STABILITY TO MEASURE ACCURACY OF CENTRALITY MEASURE
+# B Create internal data structure that contains omics list, access it internally
 #  through the check functions that need it.
-#B SUPPORT FOR NPN HUGE FUNCTIONS IF VERY HIGH DIMENSION
-#B CONTROL EBIC LAMBDA RANGE??
-#B INTERACTIVE NETWORK VISUALIZATION
+# B SUPPORT FOR NPN HUGE FUNCTIONS IF VERY HIGH DIMENSION
+# B CONTROL EBIC LAMBDA RANGE??
+# B INTERACTIVE NETWORK VISUALIZATION
 #
 #
-#C PLOTTING MODULE WITH CUSTOMIZED SVG ICONS
-#C ADD FUNCTION THAT ALLOWS TO REPEAT RECONSTRUCTION FROM ANY REQUIRED STEP,
+# C PLOTTING MODULE WITH CUSTOMIZED SVG ICONS
+# C ADD FUNCTION THAT ALLOWS TO REPEAT RECONSTRUCTION FROM ANY REQUIRED STEP,
 #  FROM BUILDING TO SELECTION WITH A DIFFERENT METHOD, THAT WORKS ONLY WHEN
 #  OUTPUT IS NON-MINIMAL
-#C OPTIONAL CYTOSCAPE OUTPUT
-#C START REASONING ON A GUI
-#C ADD FUSED GLASSO SUPPORT?
-#C WGCNA-LIKE NETWORK ANALYSIS?
+# C OPTIONAL CYTOSCAPE OUTPUT
+# C START REASONING ON A GUI
+# C ADD FUSED GLASSO SUPPORT?
+# C WGCNA-LIKE NETWORK ANALYSIS?
 
 
 # TEST: ####
-#A FINISH WRITING TESTS TO THE HELPERS FUNCTIONS TO CHECK AND MERGE LAYERS      X
-#A TEST COPULIZE FOR NB (dimensions etc.)                                       X
-#A WRITE TESTS FOR THE RECONSTRUCT FUNCTION
-#A WRITE TESTS FOR COPULIZE
-#A WRITE TESTS FOR VERBOSITY
-#A CHECK WHICH OTHER FUNCTIONS NEED TESTING
-#B FIND METHYL-OTHER DATASET TO TEST BB (carmon_future)
-#B TEST COPULIZE FOR BB (dimensions etc.)
+# A FINISH WRITING TESTS TO THE HELPERS FUNCTIONS TO CHECK AND MERGE LAYERS      X
+# A TEST COPULIZE FOR NB (dimensions etc.)                                       X
+# A WRITE TESTS FOR THE RECONSTRUCT FUNCTION
+# A WRITE TESTS FOR COPULIZE
+# A WRITE TESTS FOR VERBOSITY
+# A CHECK WHICH OTHER FUNCTIONS NEED TESTING
+# B FIND METHYL-OTHER DATASET TO TEST BB (carmon_future)
+# B TEST COPULIZE FOR BB (dimensions etc.)
 
 
 # DOCS: ####
-#A FINALIZE WRITING DOCUMENTATION
-#A SPECIFY THAT PARAMETER COPULA IN COPULIZER IS JUST A PLACEHODER FOR FUTURE   X
-#A IMPLEMENTATION OF NEW FUNCTIONALITIES
-#A MAKE SURE TO MENTION THAT DATA SHOULD NOT BE NORMALIZED GODDAMMIT            X
-#A DOCUMENT DATA                                                                X
-#A WRITE EXAMPLES
-#A ADJUST THE HELP RD FILE PUTTING ELLIPSIS IN RIGHT SPOT, THEN DELETE ROXYGEN
+# A FINALIZE WRITING DOCUMENTATION
+# A SPECIFY THAT PARAMETER COPULA IN COPULIZER IS JUST A PLACEHODER FOR FUTURE   X
+# A IMPLEMENTATION OF NEW FUNCTIONALITIES
+# A MAKE SURE TO MENTION THAT DATA SHOULD NOT BE NORMALIZED GODDAMMIT            X
+# A DOCUMENT DATA                                                                X
+# A WRITE EXAMPLES
+# A ADJUST THE HELP RD FILE PUTTING ELLIPSIS IN RIGHT SPOT, THEN DELETE ROXYGEN
 #  SKELETON FROM ABOVE CARMON()
-
-
