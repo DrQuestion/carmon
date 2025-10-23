@@ -16,6 +16,7 @@ giving a custom input to the argument \code{marginals}.
 Print the marginal distributions currently implemented inside carmon
 }
 \examples{
-# See the marginal distributions you can select to model your omics data with carmon
+# See the marginal distributions you can select to model your omics data with
+# carmon
 which_marginals()
 }

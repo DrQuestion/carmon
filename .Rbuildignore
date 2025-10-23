@@ -1,4 +1,9 @@
-^rmonet\.Rproj$
+^carmon\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
 ^LICENSE\.md$
+^data-raw$
+^R/ToDos.R$
+^\.github$
+^dev$
+^codecov\.yml$

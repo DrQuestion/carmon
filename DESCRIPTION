@@ -40,5 +40,4 @@ Remotes:
 biocViews: NetworkInference, GraphAndNetwork, Transcriptomics, Metabolomics, Epigenetics, Proteomics, Network
 VignetteBuilder: knitr
 Depends: 
-    R (>= 3.5)
-LazyData: true
+    R (>= 4.5.0)

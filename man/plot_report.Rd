@@ -19,13 +19,15 @@ Returns NULL, invisibly.
 Plot the results of the node centrality analysis
 }
 \examples{
-\donttest{
 # Let's build and analyse a carmon network:
-c_obj <- carmon(multi_omics_small, net_method = "correlation",
-                cor_quant = 0.25, analysis = TRUE, plot = FALSE,
-                # analysis is already TRUE by default
-                verbose = FALSE)
+data(multi_omics)
+c_obj <- carmon(multi_omics,
+    net_method = "correlation",
+    cor_quant = 0.05, analysis = TRUE, plot = FALSE,
+    # analysis is already TRUE by default
+    verbose = FALSE
+)
 # To plot the results of the centrality analysis:
 plot_report(c_obj)
-}
+
 }

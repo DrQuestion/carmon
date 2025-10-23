@@ -29,11 +29,11 @@ Returns NULL, invisibly.
 To plot the network, it's enough to use \code{plot()} call on the \code{carmon} object.
 }
 \examples{
-
-\donttest{
-c_obj <- carmon(multi_omics_small, net_method = "correlation",
-                cor_quant = 0.25, plot = FALSE, verbose = FALSE)
+data(multi_omics_small)
+c_obj <- carmon(multi_omics_small,
+    net_method = "correlation",
+    cor_quant = 0.25, plot = FALSE, verbose = FALSE
+)
 plot(c_obj)
-}
 
 }

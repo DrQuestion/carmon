@@ -1,11 +1,37 @@
-bibentry(
-  bibtype  = "Article",
-  title    = ,
-  author   = ,
-  journal  = ,
-  year     = ,
-  volume   = ,
-  number   = ,
-  pages    = ,
-  doi      =
+pkgVer <- function(pkg) {
+    if (!exists("meta") || is.null(meta)) meta <- packageDescription(pkg)
+    ver <- meta$Version
+    paste0('https://github.com/DrQuestion/carmon/', pkg, ' - R package version ', ver)
+}
+
+c(
+
+    bibentry(bibtype="manual",
+        title = "Copula-aided reconstruction of multi-omics network with carmon",
+        author = personList(
+            person("Alessio", "Albanese", , "alessio.albanese@wur.nl", role = c("aut", "cre", "cph"),
+                comment = c(ORCID = "0000-0003-1783-5613")),
+            person("Pariya", "Behrouzi", , "pariya.behrouzi@wur.nl", role = "aut",
+                comment = c(ORCID = "0000-0001-6762-5433"))
+        ),
+        year = format(Sys.Date(), "%Y"),
+        url = "http://www.bioconductor.org/packages/carmon",
+        note = pkgVer('carmon'),
+        doi = '10.18129/B9.bioc.carmon'
+    ),
+    bibentry(bibtype="Misc",
+        title = "Collaborative graphical lasso",
+        author = personList(
+            person("Alessio", "Albanese", , "alessio.albanese@wur.nl", role = c("aut", "cre", "cph"),
+                comment = c(ORCID = "0000-0003-1783-5613")),
+            person("Wouter", "Kohlen", , "wouter.kohlen@wur.nl", role = "aut",
+                comment = c(ORCID = "0000-0001-9057-2392")),
+            person("Pariya", "Behrouzi", , "pariya.behrouzi@wur.nl", role = "aut",
+                comment = c(ORCID = "0000-0001-6762-5433"))
+        ),
+        year = 2024,
+        publisher = "arXiv",
+        doi = "10.48550/arXiv.2403.18602",
+        url = "http://arxiv.org/abs/2403.18602"
+    )
 )

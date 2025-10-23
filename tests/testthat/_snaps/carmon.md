@@ -3,35 +3,40 @@
     Code
       c_obj <- carmon(multi_omics_micro, net_method = "correlation", cor_cutoff = 0.7,
         verbose = 2, plot = FALSE)
-    Output
-      Checking sample-matching, formatting the data, and other formalities.... Checking sample-matching, formatting the data, and other formalities....done 
+    Message
+      Checking sample-matching, formatting the data,
+          and other formalities....
+      Done!
       
       ****************Beginning copulization****************
-      Copulizing layer  1  of  2  ( rnaseq ) 
-      Using negative binomial marginals.... Using negative binomial marginals....done 
-      Copulizing layer  2  of  2  ( metabolomics ) 
-      Using log-normal marginals.... Using log-normal marginals....done 
+      Copulizing layer 1 of 2 (rnaseq)
+      Using negative binomial marginals....
+      Rnaseq layer copulized!
+      Copulizing layer 2 of 2 (metabolomics)
+      Using lognormal marginals....
+      Metabolomics layer copulized!
       ****************Copulization complete*****************
       
       ***********Beginning network reconstruction***********
       Reconstructing network with Pearson's correlation....
       Correlation cutoff is 0.7
-      Reconstructing network with Pearson's correlation....done
+      Network reconstructed!
       ***********Network reconstruction complete************
       
       **************Beginning network analysis**************
-      Computing centrality measure  1  of  4  (Degree) 
+      Computing centrality measure 1 of 4 (Degree)
       No node was found to be central for Degree.
-      Computing centrality measure  2  of  4  (Betweenness) 
+      Computing centrality measure 2 of 4 (Betweenness) 
       No node was found to be central for Betweenness.
-      Computing centrality measure  3  of  4  (Closeness) 
+      Computing centrality measure 3 of 4 (Closeness) 
       No node was found to be central for Closeness.
-      Computing centrality measure  4  of  4  (Eigenvector) 
+      Computing centrality measure 4 of 4 (Eigenvector) 
       No node was found to be central for Eigenvector Centrality.
     Condition
       Warning in `compute_centrality()`:
-      No node was found to be central. No centrality report will be generated.
-    Output
+      No node was found to be central. No centrality report
+          will be generated.
+    Message
       **************Network analysis complete***************
 
 # verbosity 1 works
@@ -39,31 +44,34 @@
     Code
       c_obj <- carmon(multi_omics_micro, net_method = "correlation", cor_cutoff = 0.7,
         verbose = 1, plot = FALSE)
-    Output
-      Checking sample-matching, formatting the data, and other formalities.... Checking sample-matching, formatting the data, and other formalities....done 
+    Message
+      Checking sample-matching, formatting the data,
+          and other formalities....
+      Done!
       
       ****************Beginning copulization****************
-      Copulizing layer  1  of  2  ( rnaseq ) 
-      Copulizing layer  2  of  2  ( metabolomics ) 
+      Copulizing layer 1 of 2 (rnaseq)
+      Copulizing layer 2 of 2 (metabolomics)
       ****************Copulization complete*****************
       
       ***********Beginning network reconstruction***********
       Reconstructing network with Pearson's correlation....
       Correlation cutoff is 0.7
-      Reconstructing network with Pearson's correlation....done
+      Network reconstructed!
       ***********Network reconstruction complete************
       
       **************Beginning network analysis**************
-      Computing centrality measures.... 
+      Computing centrality measures....
       No node was found to be central for Degree.
       No node was found to be central for Betweenness.
       No node was found to be central for Closeness.
       No node was found to be central for Eigenvector Centrality.
-      Computing centrality measures....done 
+      Centrality measures computed!
     Condition
       Warning in `compute_centrality()`:
-      No node was found to be central. No centrality report will be generated.
-    Output
+      No node was found to be central. No centrality report
+          will be generated.
+    Message
       **************Network analysis complete***************
 
 # print.carmon without centrality works

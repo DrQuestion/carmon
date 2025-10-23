@@ -17,9 +17,9 @@ compute_centrality(
 \item{carmon_obj}{The object of \code{S3} class \code{carmon}.}
 
 \item{measures}{A string of characters, each one representing one of four
-possible centrality measures implemented: \code{"d"} stands for degree
-centrality, \code{"b"} for betweenness centrality, \code{"c"} for closeness
-centrality, and \code{"e"} for eigenvector centrality. Default is \code{"dbce"}, all
+possible centrality measures implemented: \code{'d'} stands for degree
+centrality, \code{'b'} for betweenness centrality, \code{'c'} for closeness
+centrality, and \code{'e'} for eigenvector centrality. Default is \code{'dbce'}, all
 the four measures.}
 
 \item{max_candidates}{What is the highest amount of nodes that can be
@@ -49,7 +49,9 @@ consisting of the input \code{carmon_obj} enriched of two new elements:
 \itemize{
 \item \code{report} an R data frame. The rows correspond to the nodes identified to
 be central by the analysis, and they are ordered based on how large is
-the consensus among the different measures. The data frame has 6 columns: \cr
+the consensus among the different measures. The data frame has 6 or less
+columns, depending on whether the respective centrality measures have
+found any central node: \cr
 \emph{candidate}, the name of the central node; \cr
 \emph{degree}, the degree centrality of the node; \cr
 \emph{betweenness}, the betweenness centrality of the node; \cr
@@ -67,14 +69,17 @@ the reported measure.
 }
 \description{
 Find the top central nodes according to multiple centrality measures of
-choice Use a consensus of multiple centrality measures to identify nodes that could
-be important in the network obtained through \code{carmon}
+choice Use a consensus of multiple centrality measures to identify nodes
+that could be important in the network obtained through \code{carmon}
 }
 \examples{
-# compute_centrality() needs an object of S3 class "carmon" as an input. The
+# compute_centrality() needs an object of S3 class 'carmon' as an input. The
 # following line quickly obtains one.
-c_obj <- carmon(multi_omics_small, net_method = "correlation",
-                cor_quant = 0.25, analysis = FALSE, verbose = FALSE)
+data(multi_omics_small)
+c_obj <- carmon(multi_omics_small,
+    net_method = "correlation",
+    cor_quant = 0.25, analysis = FALSE, verbose = FALSE
+)
 # Then to perform the consensus centrality analysis:
 c_obj <- compute_centrality(c_obj)
 

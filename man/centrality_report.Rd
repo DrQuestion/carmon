@@ -2,7 +2,8 @@
 % Please edit documentation in R/analyse.R
 \name{centrality_report}
 \alias{centrality_report}
-\title{Display the table of results of the consensus centrality analysis of the \code{carmon} network}
+\title{Display the table of results of the consensus centrality analysis of the
+\code{carmon} network}
 \usage{
 centrality_report(carmon_obj)
 }
@@ -26,14 +27,18 @@ different measures. The data frame has 6 columns: \cr
 measures according to which the node is central for.
 }
 \description{
-Display the table of results of the consensus centrality analysis of the \code{carmon} network
+Display the table of results of the consensus centrality analysis of the
+\code{carmon} network
 }
 \examples{
 # Let's build and analyse a carmon network:
-c_obj <- carmon(multi_omics_small, net_method = "correlation",
-                cor_quant = 0.25, analysis = TRUE, plot = FALSE,
-                # analysis is already TRUE by default
-                verbose = FALSE)
+data(multi_omics_small)
+c_obj <- carmon(multi_omics_small,
+    net_method = "correlation",
+    cor_quant = 0.25, analysis = TRUE, plot = FALSE,
+    # analysis is already TRUE by default
+    verbose = FALSE
+)
 # To display the table of the results of the centrality analysis:
 centrality_report(c_obj)
 

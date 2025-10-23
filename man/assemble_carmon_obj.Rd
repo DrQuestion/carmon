@@ -2,14 +2,17 @@
 % Please edit documentation in R/helpers.R
 \name{assemble_carmon_obj}
 \alias{assemble_carmon_obj}
-\title{Assemble an object of class \code{carmon_cop} and one of class \code{carmon_rec} into a \code{carmon} object}
+\title{Assemble an object of class \code{carmon_cop} and one of class \code{carmon_rec} into a
+\code{carmon} object}
 \usage{
 assemble_carmon_obj(carmon_cop, carmon_rec)
 }
 \arguments{
-\item{carmon_cop}{An object of \code{S3} class \code{carmon_cop}, resulting from \code{copulize()}.}
+\item{carmon_cop}{An object of \code{S3} class \code{carmon_cop}, resulting from
+\code{copulize()}.}
 
-\item{carmon_rec}{An object of \code{S3} class \code{carmon_rec}, resulting from \code{reconstruct()}.}
+\item{carmon_rec}{An object of \code{S3} class \code{carmon_rec}, resulting from
+\code{reconstruct()}.}
 }
 \value{
 \code{assemble_carmon_obj()} returns an object of \code{S3} class \code{carmon},
@@ -19,13 +22,16 @@ functions. For the details of the composition of this object see
 result of a \code{carmon()} run setting the argument \code{analysis = FALSE}.
 }
 \description{
-Assemble an object of class \code{carmon_cop} and one of class \code{carmon_rec} into a \code{carmon} object
+Assemble an object of class \code{carmon_cop} and one of class \code{carmon_rec} into a
+\code{carmon} object
 }
 \examples{
+data(multi_omics_micro)
 carmon_cop_obj <- copulize(multi_omics_micro, verbose = FALSE)
 carmon_rec_obj <- reconstruct(carmon_cop_obj$layers,
-                              net_method = "correlation",
-                              cor_quant = 0.5, verbose = FALSE)
+    net_method = "correlation",
+    cor_quant = 0.5, verbose = FALSE
+)
 carmon_obj <- assemble_carmon_obj(carmon_cop_obj, carmon_rec_obj)
 
 }

@@ -6,57 +6,134 @@ output: github_document
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+    collapse = TRUE,
+    comment = "#>",
+    fig.path = "man/figures/README-",
+    out.width = "100%"
 )
 ```
 
 # carmon - Copula Aided Reconstruction of Multi-Omics Networks
 
 <!-- badges: start -->
-
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Bioc release status](http://www.bioconductor.org/shields/build/release/bioc/carmon.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/carmon)
+[![Bioc devel status](http://www.bioconductor.org/shields/build/devel/bioc/carmon.svg)](https://bioconductor.org/checkResults/devel/bioc-LATEST/carmon)
+[![Bioc downloads rank](https://bioconductor.org/shields/downloads/release/carmon.svg)](http://bioconductor.org/packages/stats/bioc/carmon/)
+[![Bioc support](https://bioconductor.org/shields/posts/carmon.svg)](https://support.bioconductor.org/tag/carmon)
+[![Bioc history](https://bioconductor.org/shields/years-in-bioc/carmon.svg)](https://bioconductor.org/packages/release/bioc/html/carmon.html#since)
+[![Bioc last commit](https://bioconductor.org/shields/lastcommit/devel/bioc/carmon.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/carmon/)
+[![Bioc dependencies](https://bioconductor.org/shields/dependencies/release/carmon.svg)](https://bioconductor.org/packages/release/bioc/html/carmon.html#since)
+[![R-CMD-check](https://github.com/DrQuestion/carmon/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/DrQuestion/carmon/actions/workflows/R-CMD-check.yaml)
+[![check-bioc](https://github.com/DrQuestion/carmon/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/DrQuestion/carmon/actions/workflows/check-bioc.yml)
+[![Codecov test coverage](https://codecov.io/gh/DrQuestion/carmon/graph/badge.svg)](https://app.codecov.io/gh/DrQuestion/carmon)
 <!-- badges: end -->
 
-Carmon uses copula-based approaches to reconstruct multi-omics networks. Copulae allow to maximize the use of the information contained in non-normalized raw omics data, creating a mirror image in the normal realm for each variable of every omics layer. Carmon then uses these "mirror" normal variables to reconstruct the multi-omics network.
+Carmon uses copula-based approaches to reconstruct multi-omics networks. Copulas
+allow to maximize the use of the information contained in non-normalized raw 
+omics data, creating a mirror image in the normal realm for each variable of 
+every omics layer. Carmon then uses these "mirror" normal variables to 
+reconstruct the multi-omics network.
 
 ## Installation
 
 You can install carmon from [Bioconductor](https://bioconductor.org/) with:
 
-``` r
+``` {r, eval=FALSE}
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("carmon")
 ```
 
+Alternatively, you can install the *development* version from 
+[GitHub](https://github.com/). First, make sure to install devtools with:
+
+``` {r, eval=FALSE}
+if (!require("devtools")) {
+  install.packages("devtools")
+}
+```
+
+You can then install the development version with:
+
+``` {r, eval=FALSE}
+devtools::install_github("DrQuestion/carmon")
+```
+
 ## Usage
 
-Here is an example of the typical usage of carmon to reconstruct a multi-omics network. For a more customized use of the package, please see `vignette("carmon")`. The main function of the package is `carmon()`, a single wrapping function encompassing all the modules of the package. Two are the minimal recommended arguments to use `carmon()`. The first one is the input multi-omics data, and it is mandatory. 
-<!-- Check how to integrate MultiAssay class from Bioc -->  
-It should be preferably provided in the form of an R list containing the single omics layers separately. The function expects every layer to be perfectly source-matched. This means that every variable of every layer must have been measured for the same individuals/samples/replicates. The second recommended argument is the `omics` argument, which espects a vector with as many elements as the multi-omics layers to analyse. Each element in the vector must correspond to the respective omics layer in the input data, and it must define the omics type (*e.g.* `omics = c("trancriptomics", "metabolomics")` in case of a multi-mics dataset with this two kind of layers). In this example we use the small dataset already provided by the package, `name_of_dataset`. It has two layers, a xxx and a yy layer, of, respectively, nx genes and ny metabolites.
-Most multi-omics datasets will not have the same omics layer repeated twice. In that case, if the elements of the input list with the multi-omics data are named as the values expected by the argument `omics`, the `omics` argument is unnecessary. Since this is the case with `name_of_dataset`, we omit the `omics` argument.
+Here is an example of the typical usage of `carmon` to reconstruct a multi-omics 
+network. For a more customized use of the package, please see 
+`vignette("carmon")`. The main function of the package is `carmon()`, a single 
+wrapping function encompassing all the modules of the package. When the input 
+data are properly formatted, `carmon()` only needs them as a mandatory argument.
+They should be preferably provided in the form of a named R list, with each 
+element being the data set of an omics layer, named in the R list after the 
+omics type it contains. The available omics types for which `carmon` has been 
+specifically tailored, together with their accepted synonyms, are shown by the
+function `which_omics()`. The package expects every omics layer to be perfectly
+source-matched. This means that every variable of every omics layer must have 
+been measured for the same individual/sample/observation/replicate. The 
+package provides a few examples of multi-omics data sets formatted according to 
+`carmon`'s standard. In this example we use the small data set already provided
+by the package, `multi_omics_small`. 
 
-
-```{r example}
+``` {r, eval = FALSE}
+# Attaching the package
 library(carmon)
 
-# names(name_of_dataset)
+# Loading the carmon-formatted multi-omics data set
+data(multi_omics_small)
 
-# carmon_obj <- carmon(name_of_dataset)
+# Displaying the structure of the named R list
+str(multi_omics_small)
 ```
 
-This single call covers all functional modules of the package. It first uses the tailored copula framework for the respective omics layers (*e.g.*, expects gen counts of the transcriptomic data to be distributed according to a Negative Binomial distribution, and it uses the appropriate copula framework). It then builds the network with the default network reconstruction method, *coglasso* ([Albanese, Kohlen and Behrouzi, 2024](#references)), selecting the optimal one with the default selection procedure, *XEStARS* in this case ([ibid.](#references)). Following the reconstruction, it runs a network analysis module on the obtained network, identifying the key nodes accoding to four different measures. Finally, it generates two plots: the first one reporting the result of the network analysis, and the second picturing the obtained network, highlighting the possible key players.
+You can see that the data set has two layers, a transcriptomic layer named 
+`rnaseq` in the list, and a metabolomic layer named `metabolomics`. This shows 
+also that both layers have been measured over (the same) 30 observations, and 
+how of they measure, respectively, the transcript counts of 14 genes and the 
+concentrations of 5 metabolites. When the input is properly formatted, it is 
+possible to just run the function `carmon()` on it, relying on its default 
+behaviour.
+
+
+```{r example, eval=FALSE}
+carmon_obj <- carmon(multi_omics_small)
+```
+
+This single call covers all functional modules of the package. To see an example
+of how to properly format your input data, an explanation of each functional 
+module of the package that acts under the hood of the main function `carmon()`, 
+and examples of more customized behaviours, please see `vignette("carmon")`. 
+
+Among the functional modules, one performs a centrality analysis based on a 
+consensus of multiple centrality measures to highlight key nodes of the network.
+These nodes are candidates that could have an important function in the 
+biological process you are studying.
 The report generated by the network analysis can be accessed via:
 
-```{r report}
-# centrality_report(carmon_obj)
+```{r report, eval=FALSE}
+centrality_report(carmon_obj)
 ```
 
-The report table contains the nodes that resulted to be central in the analysis, accoridng to four different measures of centrality: degree (d), betwenness (b), closeness (c), and eigenvalue (e) centrality. Names that result central according to more than one measure are reported on top of the table, and the column xxx contains the first letter of the measure according to which they resulted to be central. In our interpretation, the more measures label a node as central, the more important this node is in the network.
+The report table contains the nodes that resulted to be central in the analysis,
+according to four different measures of centrality: degree (`d`), betwenness 
+(`b`), closeness (`c`), and eigenvector (`e`) centrality. Names that result 
+central according to more than one measure are reported on top of the table, 
+and the last column contains the first letter(s) of the measure(s) according to
+which they resulted to be central. In our interpretation, the more measures 
+label a node as central, the more important this node is in the network.
 
-## References
+## Contributing
+The `carmon` package is built to grow. In particular, we intend to expand it to
+new omics types and relative marginal distributions. If you wish for your 
+favourite omics layer to be included, please feel free to issue a feature 
+request on the \href{https://github.com/DrQuestion/carmon}{GitHub repository}, 
+or to directly contribute following the instructions in the `CONTRIBUTING.md` 
+file.
 
-  Albanese, A., Kohlen, W., & Behrouzi, P. (2024). Collaborative graphical lasso (arXiv:2403.18602). *arXiv* https://doi.org/10.48550/arXiv.2403.18602
+## Code of Conduct
+  Please note that the carmon project is released with a [Contributor Code of Conduct](http://bioconductor.org/about/code-of-conduct/). By contributing to 
+  this project, you agree to abide by its terms.

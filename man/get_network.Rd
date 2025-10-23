@@ -24,9 +24,12 @@ will have no labels, unless provided through \code{labels}.
 \code{carmon} object.
 }
 \examples{
-c_obj <- carmon(multi_omics_small, net_method = "correlation",
-                cor_quant = 0.25, analysis = FALSE, plot = FALSE,
-                verbose = FALSE)
+data(multi_omics_small)
+c_obj <- carmon(multi_omics_small,
+    net_method = "correlation",
+    cor_quant = 0.25, analysis = FALSE, plot = FALSE,
+    verbose = FALSE
+)
 network <- get_network(c_obj)
 
 }

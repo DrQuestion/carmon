@@ -2,7 +2,7 @@
 % Please edit documentation in R/copulize.R
 \name{copulize}
 \alias{copulize}
-\title{Use copulae to transfer every omics layer to the normal realm}
+\title{Use copulas to transfer all omics layers to the normal realm}
 \usage{
 copulize(
   layers,
@@ -16,10 +16,10 @@ copulize(
 }
 \arguments{
 \item{layers}{The omics layers to analyze. Preferably provided as a named R
-list of \strong{non-normalized} omics data sets. If possible the names of the list
-should correspond to the respective omics type. If not possible, for
-example because of two layers from the same technology, please provide the
-omics types with the parameter \code{omics}.  To see a list of available
+list of \strong{non-normalized} omics data sets. If possible the names of
+the list should correspond to the respective omics type. If not possible,
+for example because of two layers from the same technology, please provide
+the omics types with the parameter \code{omics}.  To see a list of available
 omics types run the function \code{which_omics()}.
 Each data set should be source-matched (same amount of matched samples or
 individuals across each data set). Placing the samples (or individuals)
@@ -40,7 +40,7 @@ the dimension of the first one.}
 \item{omics}{Highly recommended. A vector of as many elements as the number
 of layers, naming what omics each layer contains, in the same order as
 provided in the input \code{layers}
-(\emph{e.g.} \code{omics = c("RNA-seq", "proteomics", "metabolomics")}). To
+(\emph{e.g.} \code{omics = c('RNA-seq', 'proteomics', 'metabolomics')}). To
 see a list of terms and omics technologies for which carmon is specifically
 tailored, use the function \code{which_omics()}.}
 
@@ -78,12 +78,13 @@ transfer each omics layer to the normal realm.
 }
 }
 \description{
-Use copulae to transfer every omics layer to the normal realm
+Use copulas to transfer all omics layers to the normal realm
 }
 \examples{
 # To apply the copula-based transition to the normal realm, it is sufficient
 # to provide the input data as a named R list, with each element being the
 # data set of an omics layer.
+data(multi_omics_micro)
 copulized <- copulize(multi_omics_micro, verbose = FALSE)
 
 }
