@@ -14,7 +14,7 @@ Description: Reconstructs networks from multi-omics data sets, harnessing
     transformation, network reconstrution, network analysis, and plot of the
     results.
 License: GPL (>= 2)
-URL: https://github.com/DrQuestion/carmon
+URL: https://github.com/DrQuestion/carmon, https://drquestion.github.io/carmon/
 BugReports: https://github.com/DrQuestion/carmon/issues
 Imports: 
     coglasso (>= 1.0.2.9003),

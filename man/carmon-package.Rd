@@ -13,6 +13,7 @@ Reconstructs networks from multi-omics data sets, harnessing the original probab
 Useful links:
 \itemize{
   \item \url{https://github.com/DrQuestion/carmon}
+  \item \url{https://drquestion.github.io/carmon/}
   \item Report bugs at \url{https://github.com/DrQuestion/carmon/issues}
 }
 
