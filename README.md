@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# carmon - Copula Aided Reconstruction of Multi-Omics Networks
+# carmon - Copula Aided Reconstruction of Multi-Omics Networks <a href="https://drquestion.github.io/carmon/"><img src="man/figures/logo.png" align="right" height="138" alt="carmon website" /></a>
 
 <!-- badges: start -->
 

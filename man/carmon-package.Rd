@@ -5,6 +5,8 @@
 \alias{carmon-package}
 \title{carmon: Copula-Aided Reconstruction of Multi-Omics Networks}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Reconstructs networks from multi-omics data sets, harnessing the original probability distribution of the omics layers, through the use of copulas. Use the main function carmon() to perform all the functional steps of the package. These encompass copula-based data transformation, network reconstrution, network analysis, and plot of the results.
 }
 \seealso{
