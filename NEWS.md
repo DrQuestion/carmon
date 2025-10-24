@@ -1,3 +1,3 @@
 # carmon 0.99.0
 
-Submitted to Bioconductor!
+* First submission to Bioconductor

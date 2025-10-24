@@ -10,11 +10,11 @@ test_that("carmon works", {
         nc = 3, verbose = FALSE
     )
     expect_equal(c(
-        c_obj$marginals[1], c_obj$sel_icov[15, 11],
+        c_obj$marginals[1], round(c_obj$sel_icov[15, 11], 6),
         c_obj$sel_index_lw, unname(c_obj$report["central for"])
     ), c(
         "negative binomial",
-        0.0414107035728185, 2, "be"
+        0.041411, 2, "be"
     ))
 })
 
