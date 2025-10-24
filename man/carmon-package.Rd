@@ -19,7 +19,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Alessio Albanese \email{alessio.albanese@wur.nl} (\href{https://orcid.org/0000-0003-1783-5613}{ORCID}) [copyright holder]
+\strong{Maintainer}: Alessio Albanese \email{alessio.albanese.bioinf@gmail.com} (\href{https://orcid.org/0000-0003-1783-5613}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{

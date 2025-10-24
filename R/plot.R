@@ -29,6 +29,7 @@ plot.carmon <- function(x, node_labels = TRUE, hide_isolated = TRUE,
                         hot_nodes = TRUE, ...) {
     old_par <- graphics::par(no.readonly = TRUE)
     on.exit(graphics::par(old_par))
+    graphics::par(mar = c(0, 0, 2, 0))
     if (all(igraph::degree(x$network) == 0)) {
         warning("The reconstructed network is empty, it cannot be plotted.")
         return(invisible(NULL))
@@ -65,7 +66,7 @@ plot.carmon <- function(x, node_labels = TRUE, hide_isolated = TRUE,
     if (hot_nodes) {
         x$network <- annotate_hot_nodes(x)
     }
-    graphics::layout(matrix(seq_len(2), ncol = 1), heights = c(7, 1))
+    graphics::layout(matrix(seq_len(2), ncol = 1), heights = c(3, 1))
     plot(x$network, layout = lo)
     plot_legend(x, fillsframes = fillsframes, quartiles = quartiles)
     return(invisible(NULL))
@@ -218,7 +219,7 @@ annotate_hot_nodes <- function(x) {
 #' @noRd
 #'
 plot_legend <- function(x, fillsframes, quartiles = NULL) {
-    graphics::par(mar = c(0, 0, 0, 0))
+    graphics::par(mar = c(2, 2, 0, 2))
     graphics::plot.new()
     graphics::plot.window(xlim = c(0, 1), ylim = c(0, 1))
     usr <- graphics::par("usr")
@@ -240,8 +241,7 @@ plot_legend <- function(x, fillsframes, quartiles = NULL) {
     y_top <- y_bottom + updated$total_height
     graphics::legend(x = x_left, y = y_top, cex = 0.85, legend = x$omics,
         pt.bg = fillsframes[[1]], col = fillsframes[[2]],
-        pt.cex = 4 / log(igraph::gorder(x$network) + 1), pch = 21,
-        pt.lwd = 5.5 / log(igraph::gorder(x$network) + 1),
+        pt.cex = 5/3, pch = 21, pt.lwd = 1.6,
         text.col = fillsframes[[2]], bty = "n")
     if (x$net_method != "mb") {
         graphics::legend(x = x_left + legend1_width + updated$spacing,

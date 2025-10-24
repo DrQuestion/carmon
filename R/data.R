@@ -24,13 +24,12 @@
 #'   \item{metabolomics}{data set of the abundance values of 76 metabolites
 #'     (0.02--1112.67)}
 #' }
+#' @usage data(multi_omics)
 #' @source Jan, M., Gobet, N., Diessler, S. et al. A multi-omics digital
 #' research object for the genetics of sleep regulation. Sci Data 6, 258
 #' (2019) doi: \href{https://doi.org/10.1038/s41597-019-0171-x
 #' }{10.1038/s41597-019-0171-x}
-#' @source \href{https://figshare.com/articles/dataset/
-#' Input_data_for_systems_genetics_of_sleep_regulation/7797434
-#' }{Figshare folder of the original manuscript}
+#' @source \href{https://figshare.com/articles/dataset/Input_data_for_systems_genetics_of_sleep_regulation/7797434}{Figshare folder of the original manuscript}
 "multi_omics"
 
 #' @rdname multi_omics
@@ -42,6 +41,7 @@
 #'   \item{metabolomics}{data set of the abundance values of 5 metabolites
 #'   (0.17--145.33)}
 #' }
+#' @usage data(multi_omics_small)
 "multi_omics_small"
 
 #' @rdname multi_omics
@@ -53,4 +53,5 @@
 #'   \item{metabolomics}{data set of the abundance values of 2 metabolites
 #'   (58.80--145.33)}
 #' }
+#' @usage data(multi_omics_micro)
 "multi_omics_micro"

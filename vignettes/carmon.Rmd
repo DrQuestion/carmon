@@ -2,7 +2,10 @@
 title: "Reconstruct and analyse multi-omics networks with carmon"
 author: "Alessio Albanese"
 package: carmon
-output: BiocStyle::html_document
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 vignette: >
   %\VignetteIndexEntry{carmon}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,16 +15,58 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
     collapse = TRUE,
-    comment = "#>"
+    comment = "#>",
+    fig.width = 6, 
+    fig.height = 6*1.2,
+    fig.crop = FALSE
 )
 ```
 
-## Introduction and input data set-up
+## Introduction
 
-In this vignette we explain how to use the R package Copula-Aided Reconstruction
-of Multi-Omics Networks (carmon). The aim of the package is to reconstruct 
-networks from two or more layers of multi-omics data, harnessing the flexibility
-of copulas to transfer non-normally distributed omics data to the normal realm.
+Copula-Aided Reconstruction of Multi-Omics Networks (\pkg{carmon}) is an R 
+package empowered by the use of copulas as a statistical tool for the 
+reconstruction of multi-omics networks. The use of copulas as a statistical tool
+allows to transfer raw non-normalized omics data to the normal realm. In this 
+way, the package is able to harness the full statistical power of the 
+information contained in each omics layer of a multi-omics data set. At the same
+time, the transfer of the multi-omics layer to the normal realm allows the 
+application of network reconstruction models that assume normal distribution of 
+the data. Needless to say, this is an assumption rarely met by omics data, hence
+a further advantage of the use of copulas. Here, we first cover the formatting
+of the input data to provide to \pkg{carmon}. Then, we show how to easily build
+and analyse a multi-omics network with carmon. In the remaining sections, we 
+explore more advanced and customized uses of the package, as well as what 
+actually happens under the hood when the main function `carmon()` is used.
+
+## Installation
+
+You can install \pkg{carmon} from [Bioconductor](https://bioconductor.org/) 
+with:
+
+``` {r, eval=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("carmon")
+```
+
+Alternatively, you can install the *development* version from 
+[GitHub](https://github.com/). First, make sure to install devtools with:
+
+``` {r, eval=FALSE}
+if (!require("devtools")) {
+    install.packages("devtools")
+}
+```
+
+You can then install the development version with:
+
+``` {r, eval=FALSE}
+devtools::install_github("DrQuestion/carmon")
+```
+
+## Input multi-omics data set-up
 
 We first attach the package.
 
@@ -29,12 +74,12 @@ We first attach the package.
 library(carmon)
 ```
 
-We can now format the data. Carmon expects the input multi-omics data to be 
-arranged in a named R list. Each element of the list should be the data set of 
-one of the omics layers, and it should be preferably named after the omics type
-it contains. In the package there are several examples of multi-omics data sets 
-of increasing sizes, which you can see with `help(multi_omics)`. Here we use
-`multi_omics_small`.
+We can now explain the data format. Carmon expects the input multi-omics data to
+be arranged in a named R list. Each element of the list should be the data set 
+of one of the omics layers, and it should be preferably named after the omics 
+type it contains. In the package there are several examples of multi-omics data 
+sets of increasing sizes, which you can see with `help(multi_omics)`. Here we 
+use `multi_omics_small`.
 
 ```{r data input example}
 data(multi_omics_small)

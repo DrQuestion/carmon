@@ -46,16 +46,14 @@ research object for the genetics of sleep regulation. Sci Data 6, 258
 (2019) doi: \href{https://doi.org/10.1038/s41597-019-0171-x
 }{10.1038/s41597-019-0171-x}
 
-\href{https://figshare.com/articles/dataset/
-Input_data_for_systems_genetics_of_sleep_regulation/7797434
-}{Figshare folder of the original manuscript}
+\href{https://figshare.com/articles/dataset/Input_data_for_systems_genetics_of_sleep_regulation/7797434}{Figshare folder of the original manuscript}
 }
 \usage{
-multi_omics
+data(multi_omics)
 
-multi_omics_small
+data(multi_omics_small)
 
-multi_omics_micro
+data(multi_omics_micro)
 }
 \description{
 A dataset containing transcript and metabolite values analysed

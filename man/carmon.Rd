@@ -276,6 +276,6 @@ For neighborhood selection, see
 }{Meinshausen and Buhlmann (2006)}
 
 For the \emph{StARS} selection procedure, see
-\href{https://proceedings.neurips.cc/paper_files/paper/2010/file/
-301ad0e3bd5cb1627a2044908a42fdc2-Paper.pdf}{Liu \emph{et al.} (2010)}
+\href{https://proceedings.neurips.cc/paper_files/paper/2010/file/301ad0e3bd5cb1627a2044908a42fdc2-Paper.pdf
+}{Liu \emph{et al.} (2010)}
 }
