@@ -68,24 +68,59 @@ Albanese</h4>
     
     
 <div class="section level2">
-<h2 id="introduction-and-input-data-set-up">Introduction and input data set-up<a class="anchor" aria-label="anchor" href="#introduction-and-input-data-set-up"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>In this vignette we explain how to use the R package Copula-Aided
-Reconstruction of Multi-Omics Networks (carmon). The aim of the package
-is to reconstruct networks from two or more layers of multi-omics data,
-harnessing the flexibility of copulas to transfer non-normally
-distributed omics data to the normal realm.</p>
-<p>We first attach the package.</p>
+<p>Copula-Aided Reconstruction of Multi-Omics Networks () is an R
+package empowered by the use of copulas as a statistical tool for the
+reconstruction of multi-omics networks. The use of copulas as a
+statistical tool allows to transfer raw non-normalized omics data to the
+normal realm. In this way, the package is able to harness the full
+statistical power of the information contained in each omics layer of a
+multi-omics data set. At the same time, the transfer of the multi-omics
+layer to the normal realm allows the application of network
+reconstruction models that assume normal distribution of the data.
+Needless to say, this is an assumption rarely met by omics data, hence a
+further advantage of the use of copulas. Here, we first cover the
+formatting of the input data to provide to . Then, we show how to easily
+build and analyse a multi-omics network with carmon. In the remaining
+sections, we explore more advanced and customized uses of the package,
+as well as what actually happens under the hood when the main function
+<code><a href="../reference/carmon.html">carmon()</a></code> is used.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install from <a href="https://bioconductor.org/" class="external-link">Bioconductor</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DrQuestion/carmon" class="external-link">carmon</a></span><span class="op">)</span></span></code></pre></div>
-<p>We can now format the data. Carmon expects the input multi-omics data
-to be arranged in a named R list. Each element of the list should be the
-data set of one of the omics layers, and it should be preferably named
-after the omics type it contains. In the package there are several
-examples of multi-omics data sets of increasing sizes, which you can see
-with <code><a href="../reference/multi_omics.html">help(multi_omics)</a></code>. Here we use
-<code>multi_omics_small</code>.</p>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"carmon"</span><span class="op">)</span></span></code></pre></div>
+<p>Alternatively, you can install the <em>development</em> version from
+<a href="https://github.com/" class="external-link">GitHub</a>. First, make sure to install
+devtools with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>You can then install the development version with:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"DrQuestion/carmon"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="input-multi-omics-data-set-up">Input multi-omics data set-up<a class="anchor" aria-label="anchor" href="#input-multi-omics-data-set-up"></a>
+</h2>
+<p>We first attach the package.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/DrQuestion/carmon" class="external-link">carmon</a></span><span class="op">)</span></span></code></pre></div>
+<p>We can now explain the data format. Carmon expects the input
+multi-omics data to be arranged in a named R list. Each element of the
+list should be the data set of one of the omics layers, and it should be
+preferably named after the omics type it contains. In the package there
+are several examples of multi-omics data sets of increasing sizes, which
+you can see with <code><a href="../reference/multi_omics.html">help(multi_omics)</a></code>. Here we use
+<code>multi_omics_small</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">multi_omics_small</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">multi_omics_small</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
@@ -115,7 +150,7 @@ set, you can see how all the observations are in the same order and
 distributed along the rows for both the transcriptomic and the
 metabolomic data set. After your separate data sets are properly
 formatted, you can assemble them in a single list as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Let's build two separate data sets just for the sake of our example:</span></span>
 <span><span class="va">layer_1</span> <span class="op">&lt;-</span> <span class="va">multi_omics_small</span><span class="op">$</span><span class="va">rnaseq</span></span>
 <span><span class="va">layer_2</span> <span class="op">&lt;-</span> <span class="va">multi_omics_small</span><span class="op">$</span><span class="va">metabolomics</span></span>
@@ -138,7 +173,7 @@ a <!--
 <p>The carmon package covers multiple functional steps of network
 reconstruction and analysis from multi-omics data. To perform a full,
 default run of carmon, it is necessary to run:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">c_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/carmon.html">carmon</a></span><span class="op">(</span><span class="va">multi_omics_small</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Checking sample-matching, formatting the data,</span></span>
 <span><span class="co">#&gt;     and other formalities....</span></span>
@@ -157,7 +192,7 @@ default run of carmon, it is necessary to run:</p>
 <span><span class="co">#&gt; Compiling the report....</span></span>
 <span><span class="co">#&gt; Report compiled!</span></span>
 <span><span class="co">#&gt; **************Network analysis complete***************</span></span></code></pre></div>
-<p><img src="carmon_files/figure-html/default%20run-1.png" width="700"><img src="carmon_files/figure-html/default%20run-2.png" width="700"></p>
+<p><img src="carmon_files/figure-html/default%20run-1.png" width="576"><img src="carmon_files/figure-html/default%20run-2.png" width="576"></p>
 <p>Under the hood, there are several processes happening. In order: the
 check-ups and formatting of the input data; the copula-based transfer of
 non-normal omics data to the normal realm; the reconstruction and
@@ -169,7 +204,7 @@ of these steps can be customized within the main wrapper function, using
 specific arguments. We will see how in the next sections, but first
 let’s access the results of the centrality consensus analysis with the
 function <code><a href="../reference/centrality_report.html">centrality_report()</a></code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/centrality_report.html">centrality_report</a></span><span class="op">(</span><span class="va">c_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          candidate  degree betweenness closeness eigenvector central for</span></span>
 <span><span class="co">#&gt; BC004004  BC004004 0.1667*     0.0719*       0.6          1*         dbe</span></span>
@@ -205,7 +240,7 @@ tailored a default behavior, please use the function
 <code><a href="../reference/which_omics.html">which_omics()</a></code>. Be aware that carmon is built for being
 upgraded, so soon there will be new omics types for which we implement a
 tailored default behavior.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/which_omics.html">which_omics</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; "rna-seq", also as "rnaseq", "gene counts", "transcriptomics"</span></span>
 <span><span class="co">#&gt;     is modeled by default as count data with a negative-binomial marginal.</span></span>
@@ -231,7 +266,7 @@ that your particular data set follows a different statistical
 distribution, you can run the function <code><a href="../reference/which_marginals.html">which_marginals()</a></code>.
 This function displays which are the statistical distributions that
 carmon is curently compatible with.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/which_marginals.html">which_marginals</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; "e" or "empirical" for using the empirical marginal distribution;</span></span>
 <span><span class="co">#&gt; "n" or "normal" for using the normal marginal distribution;</span></span>
@@ -432,7 +467,7 @@ four measures, but we will select the top 2% for each measure to select
 the candidates for consensus. Moreover, we will hide the name of those
 nodes that are not found to be central. Finally, we will inspect the
 result of the consensus centrality analysis.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">multi_omics</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">multi_omics</span><span class="op">)</span> <span class="co"># 162 genes, 76 metabolites, for 30 observations</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
@@ -473,8 +508,8 @@ result of the consensus centrality analysis.</p>
 <span><span class="co">#&gt; Compiling the report....</span></span>
 <span><span class="co">#&gt; Report compiled!</span></span>
 <span><span class="co">#&gt; **************Network analysis complete***************</span></span></code></pre></div>
-<p><img src="carmon_files/figure-html/custom%20run-1.png" width="700"><img src="carmon_files/figure-html/custom%20run-2.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p><img src="carmon_files/figure-html/custom%20run-1.png" width="576"><img src="carmon_files/figure-html/custom%20run-2.png" width="576"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/centrality_report.html">centrality_report</a></span><span class="op">(</span><span class="va">c_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt;               candidate  degree betweenness closeness eigenvector central for</span></span>
@@ -527,7 +562,7 @@ Models (arXiv:1006.3316). <em>arXiv</em> <a href="https://doi.org/10.48550/arXiv
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.5.1 (2025-06-13)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu</span></span>
