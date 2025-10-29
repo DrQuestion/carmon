@@ -15,7 +15,7 @@ c(
                 comment = c(ORCID = "0000-0001-6762-5433"))
         ),
         year = format(Sys.Date(), "%Y"),
-        url = "http://www.bioconductor.org/packages/carmon",
+        url = "https://www.bioconductor.org/packages/carmon",
         note = pkgVer('carmon'),
         doi = '10.18129/B9.bioc.carmon'
     ),
@@ -32,6 +32,6 @@ c(
         year = 2024,
         publisher = "arXiv",
         doi = "10.48550/arXiv.2403.18602",
-        url = "http://arxiv.org/abs/2403.18602"
+        url = "https://arxiv.org/abs/2403.18602"
     )
 )

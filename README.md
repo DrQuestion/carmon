@@ -135,10 +135,10 @@ The `carmon` package is built to grow. In particular, we intend to
 expand it to new omics types and relative marginal distributions. If you
 wish for your favourite omics layer to be included, please feel free to
 issue a feature request on the , or to directly contribute following the
-instructions in the `CONTRIBUTING.md` file.
+instructions in the page.
 
 ## Code of Conduct
 
 Please note that the carmon project is released with a [Contributor Code
-of Conduct](http://bioconductor.org/about/code-of-conduct/). By
+of Conduct](https://bioconductor.org/about/code-of-conduct/). By
 contributing to this project, you agree to abide by its terms.
