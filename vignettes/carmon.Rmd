@@ -16,8 +16,8 @@ vignette: >
 knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>",
-    fig.width = 6, 
-    fig.height = 6*1.2,
+    fig.width = 6,
+    fig.height = 6 * 1.2,
     fig.crop = FALSE
 )
 ```
@@ -45,8 +45,9 @@ You can install \pkg{carmon} from [Bioconductor](https://bioconductor.org/)
 with:
 
 ``` {r, eval=FALSE}
-if (!require("BiocManager", quietly = TRUE))
+if (!require("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
+}
 
 BiocManager::install("carmon")
 ```
