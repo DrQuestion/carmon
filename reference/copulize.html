@@ -55,19 +55,34 @@
 
 
 <dl><dt id="arg-layers">layers<a class="anchor" aria-label="anchor" href="#arg-layers"></a></dt>
-<dd><p>The omics layers to analyze. Preferably provided as a named R
-list of <strong>non-normalized</strong> omics data sets. If possible the names of
-the list should correspond to the respective omics type. If not possible,
-for example because of two layers from the same technology, please provide
-the omics types with the parameter <code>omics</code>.  To see a list of available
-omics types run the function <code><a href="which_omics.html">which_omics()</a></code>.
+<dd><p>The omics layers to analyze. They can be provided in three
+possible formats, and they should always contain source-matched,
+<strong>non-normalized</strong> data, to use <span class="pkg">carmon</span> to its full potential.</p><ul><li><p>A named R list of omics data sets (<em>recommended</em>). If possible
+the names of the list should correspond to the respective omics type. If
+not possible, for example because of two layers from the same technology,
+please provide the omics types with the parameter <code>omics</code>. To see a list of
+available omics types use the function <code><a href="which_omics.html">which_omics()</a></code>.<br>
 Each data set should be source-matched (same amount of matched samples or
-individuals across each data set). Placing the samples (or individuals)
+individuals across each data set). Placing of the samples (or individuals)
 should also be consistent: either along the rows for <em>all</em> the data
 sets, or along the columns for <em>all</em> the data sets, nothing in
 between. All the samples (or individuals) should also have consistent
-naming across the data sets.<br><code>layers</code> can also be a single unified data set, but then it is necessary to
-specify the argument <code>p</code>.</p></dd>
+naming across the data sets.</p></li>
+<li><p>An object of <code>S4</code> class <code>MultiAssayExperiment</code> (more
+<a href="https://github.com/waldronlab/MultiAssayExperiment/reference/MultiAssayExperiment.html" class="external-link">here</a>). In that case, we
+recommend using the <code>omics</code> parameter to specify which are the omics layers
+contained in the object, in the same order as presented by
+<code>MultiAssayExperiment::experiments(layers)</code>. This allows to use
+<span class="pkg">carmon</span> to its full potential. To see a list of terms and omics
+technologies for which <span class="pkg">carmon</span> is specifically tailored, use the
+function <code><a href="which_omics.html">which_omics()</a></code>. Please remember that <code><a href="carmon.html">carmon()</a></code> expects data to
+be non-normalized, meaning that for RNA-seq data, for example, it will
+expect data to be in the form of counts.</p></li>
+<li><p>A single unified data set, but then it is
+necessary to specify the argument <code>p</code>. We also recommend using the
+<code>omics</code> parameter to specify which are the omics layers contained in the
+data set.</p></li>
+</ul></dd>
 
 
 <dt id="arg-p">p<a class="anchor" aria-label="anchor" href="#arg-p"></a></dt>
