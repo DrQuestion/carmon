@@ -82,6 +82,21 @@ check_layers_num <- function(layers = NULL, p = NULL, omics = NULL,
     }
 }
 
+#' Obtain a named R list of layers from a MultiAssayExperiment object
+#'
+#' @param layers An object of `S4` class `MultiAssayExperiment`.
+#'
+#' @returns It returns a named R list of omics layers of the typical `carmon`
+#'   format.
+#'
+#' @noRd
+layers_from_MAE <- function(layers) {
+    layers <- MultiAssayExperiment::intersectColumns(layers)
+    layers <- BiocGenerics::as.list(MultiAssayExperiment::assays(layers))
+    layers <- lapply(layers, t)
+    return(layers)
+}
+
 #' Split a single data set in a list of sub-data sets
 #'
 #' `split_layers()` splits a single data set in multiple ones, each one having
@@ -127,7 +142,9 @@ split_layers <- function(layers, p, omics = NULL) {
 #' @noRd
 check_omics <- function(omics, marginals) {
     admitted_omics <- c(
-        "rna-seq", "rnaseq", "gene counts", "transcriptomics",
+        "rna-seq", "rnaseq", "rna", "gene counts", "transcriptomics",
+        "mirna-seq", "mirnaseq", "microrna-seq", "micrornaseq", "mirna",
+        "microrna",
         "proteomics", "protein fragments", "protein counts",
         #                       "bs-seq", "bsseq", "wgbs", "methylomics",
         "metabolomics", "lc-ms", "gc-ms", "ms"
@@ -320,7 +337,10 @@ determine_n_candidates <- function(carmon_obj, max_candidates, quant) {
 #' # See the compatible omics types, their synonyms, and their distributions
 #' which_omics()
 which_omics <- function() {
-    message('"rna-seq", also as "rnaseq", "gene counts", "transcriptomics"
+message('"rna-seq", also as "rnaseq", "rna", "gene counts", "transcriptomics"
+    is modeled by default as count data with a negative-binomial marginal.\n
+"mirna-seq", also as "mirnaseq", "microrna-seq", "micrornaseq", "mirna",
+    "microrna"
     is modeled by default as count data with a negative-binomial marginal.\n
 "proteomics", also as "protein fragments", "protein counts"
     is modeled by default as count data with a negative-binomial marginal.\n

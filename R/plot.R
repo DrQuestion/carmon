@@ -36,6 +36,9 @@ plot.carmon <- function(x, node_labels = TRUE, hide_isolated = TRUE,
     }
     if (!node_labels) {
         igraph::V(x$network)$label <- NA
+    } else {
+        igraph::V(x$network)$label <- parse(text = gsub(
+            " |:|-", "_", igraph::V(x$network)$label))
     }
     res <- colorize_network(x)
     x$network <- res$net
@@ -52,9 +55,7 @@ plot.carmon <- function(x, node_labels = TRUE, hide_isolated = TRUE,
     if (hide_isolated) {
         disconnected <- which(igraph::degree(x$network) == 0)
         x$network <- igraph::delete_vertices(x$network, disconnected)
-        if (length(disconnected)) {
-            lo <- lo[-disconnected, ]
-        }
+        if (length(disconnected)) lo <- lo[-disconnected, ]
     }
     igraph::V(x$network)$frame.width <- 5.5 / log(igraph::gorder(x$network) + 1)
     igraph::V(x$network)$size <- 40 / log(igraph::gorder(x$network) + 1)
@@ -63,11 +64,14 @@ plot.carmon <- function(x, node_labels = TRUE, hide_isolated = TRUE,
     igraph::V(x$network)$label.dist <- (igraph::V(x$network)$size / 15) +
         (igraph::V(x$network)$frame.width / 2)
     igraph::V(x$network)$label.cex <- 0.75
+    graphics::layout(matrix(seq_len(2), ncol = 1), heights = c(3, 1))
     if (hot_nodes) {
         x$network <- annotate_hot_nodes(x)
+        plot(x$network, layout = lo,
+            vertex.label = parse(text = igraph::V(x$network)$label))
+    } else {
+        plot(x$network, layout = lo)
     }
-    graphics::layout(matrix(seq_len(2), ncol = 1), heights = c(3, 1))
-    plot(x$network, layout = lo)
     plot_legend(x, fillsframes = fillsframes, quartiles = quartiles)
     return(invisible(NULL))
 }

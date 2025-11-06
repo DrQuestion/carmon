@@ -3,7 +3,11 @@
     Code
       which_omics()
     Message
-      "rna-seq", also as "rnaseq", "gene counts", "transcriptomics"
+      "rna-seq", also as "rnaseq", "rna", "gene counts", "transcriptomics"
+          is modeled by default as count data with a negative-binomial marginal.
+      
+      "mirna-seq", also as "mirnaseq", "microrna-seq", "micrornaseq", "mirna",
+          "microrna"
           is modeled by default as count data with a negative-binomial marginal.
       
       "proteomics", also as "protein fragments", "protein counts"

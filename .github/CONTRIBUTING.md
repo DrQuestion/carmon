@@ -39,11 +39,13 @@ these are the passages to follow to include a new omics type:
     can see how "rna-seq" and "gene count" both link to the Negative Binomial 
     marginal distribution.
 
-*   Modify the user helping function `which_omics()` in the `R/helpers.R` file
-    accordingly, adding your new omics type, the accepted synonyms, and the 
-    default marginal distribution you decided to assign to it. Please, respect 
-    the syntax of the message (indentation, order of words, etc.) to mirror the 
-    behaviour of the omics types that are already explained there.
+*   Modify the user helping function `which_omics()` and the input check 
+    function `check_omics()` in the `R/helpers.R` file accordingly, adding your 
+    new omics type, the accepted synonyms, and, in the case of `which_omics()`,
+    the default marginal distribution you decided to assign to it. Please, 
+    respect the syntax and structure (indentation, order of words, etc.) of both
+    functions **and** of the message returned by `which_omics()` to mirror the 
+    behaviour of the omics types that are already present in those.
     
 #### New marginal distribution, no new omics type
 

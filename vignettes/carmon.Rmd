@@ -75,7 +75,7 @@ We first attach the package.
 library(carmon)
 ```
 
-We can now explain the data format. Carmon expects the input multi-omics data to
+We can now explain the data format. Carmon prefers the input multi-omics data to
 be arranged in a named R list. Each element of the list should be the data set 
 of one of the omics layers, and it should be preferably named after the omics 
 type it contains. In the package there are several examples of multi-omics data 
@@ -120,6 +120,19 @@ all(rownames(layer_1) == rownames(layer_2)) # TRUE
 # We can now build our R list as follows:
 multi_omics_small <- list("rnaseq" = layer_1, "metabolomics" = layer_2)
 ```
+
+### Using `MultiAssayExperiment` objects or single unified data sets as input
+
+It is also possible to provide `carmon()` with a 
+[MultiAssayExperiment
+](https://doi.org/doi:10.18129/B9.bioc.MultiAssayExperiment) or a
+single unified multi-omics data set. In the latter, it is necessary to specify 
+the argument `p`, a vector with the number of features of each layer, in the 
+same order as the layers are assembled in the data set. Moreover, with both 
+these use cases, we strongly recommend using the 
+`omics` argument to specify which omics type is measured by each layer. To see 
+which omics types `carmon()` is tailored for, together with their accepted 
+synonyms and assumed statistical behavior, see `which_omics()`.
 
 ## Carmon to perform copula-aided reconstruction, analysis and plot of a <!-- 
 --> multi-omics network
@@ -191,7 +204,7 @@ concentrations.
 If this is the default behavior for such omics types, but you know that your 
 particular data set follows a different statistical distribution, you can run 
 the function `which_marginals()`. This function displays which are the 
-statistical distributions that carmon is curently compatible with.
+statistical distributions that carmon is currently compatible with.
 
 ```{r which_marginals()}
 which_marginals()
@@ -373,16 +386,6 @@ c_obj <- carmon(multi_omics,
 
 centrality_report(c_obj)
 ```
-
-### A note on input data formatting
-
-It is also possible to provide `carmon()` with a single unified multi-omics data
-set, but then it is necessary to specify the argument `p`, a vector with the 
-number of features of each layer, in the same order as the layers are assembled 
-in the data set. Moreover, with this use case we strongly recommend using the 
-`omics` argument to specify which omics type is measured by each layer. To see 
-which omics types `carmon()` is tailored for, together with their accepted 
-synonyms and assumed statistical behavior, see `which_omics()`.
 
 ## References {#ref}
 

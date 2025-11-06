@@ -7,21 +7,34 @@
 #' analysis of the network to identify key omics features, and enriched plot of
 #' the network and of the analysis results.
 #'
-#' @param layers The omics layers to analyze. Preferably provided as a named R
-#'   list of \strong{non-normalized} omics data sets. If possible the names of
-#'   the list
-#'   should correspond to the respective omics type. If not possible, for
-#'   example because of two layers from the same technology, please provide the
-#'   omics types with the parameter `omics`.  To see a list of available
-#'   omics types use the function `which_omics()`.\cr
+#' @param layers The omics layers to analyze. They can be provided in three
+#' possible formats, and they should always contain source-matched,
+#' \strong{non-normalized} data, to use \pkg{carmon} to its full potential.
+#' \itemize{
+#'   \item{} A named R list of omics data sets (\emph{recommended}). If possible
+#'   the names of the list should correspond to the respective omics type. If
+#'   not possible, for example because of two layers from the same technology,
+#'   please provide the omics types with the parameter `omics`. To see a list of
+#'   available omics types use the function `which_omics()`.\cr
 #'   Each data set should be source-matched (same amount of matched samples or
 #'   individuals across each data set). Placing of the samples (or individuals)
 #'   should also be consistent: either along the rows for \emph{all} the data
 #'   sets, or along the columns for \emph{all} the data sets, nothing in
 #'   between. All the samples (or individuals) should also have consistent
-#'   naming across the data sets.\cr
-#'   `layers` can also be a single unified data set, but then it is necessary to
-#'   specify the argument `p`.
+#'   naming across the data sets.
+#'   \item{} An object of `S4` class `MultiAssayExperiment`. In that case, we
+#'   recommend using the `omics` parameter to specify which are the omics layers
+#'   contained in the object, in the same order as presented by
+#'   `MultiAssayExperiment::experiments(layers)`. This allows to use
+#'   \pkg{carmon} to its full potential. To see a list of terms and omics
+#'   technologies for which \pkg{carmon} is specifically tailored, use the
+#'   function `which_omics()`. Please remember that `carmon()` expects data to
+#'   be non-normalized, meaning that for RNA-seq data, for example, it will
+#'   expect data to be in the form of counts.
+#'   \item{} A single unified data set, but then it is
+#'   necessary to specify the argument `p`. We also recommend using the
+#'   `omics` parameter to specify which are the omics layers contained in the
+#'   data set.}
 #' @param p  Necessary \strong{only} in case `layers` is a single data set.
 #'   A vector with with the number of variables for each omic layer of the
 #'   data set (e.g. the number of transcripts, metabolites etc.), in the same
@@ -282,8 +295,7 @@ print.carmon <- function(x, ...) {
         cat("Carmon network estimated with ", x$net_method,
             " and selected with ", x$sel_method, ".\n\n", sep = "")
     } else {
-        cat("Carmon network estimated with ", x$net_method,
-            " and selected with ", x$sel_method, ".\n\n", sep = "")
+        cat("Carmon network estimated with ", x$net_method, ".\n\n", sep = "")
     }
     cat("The call was:\n", paste(deparse(x$call), sep = "\n", collapse = "\n"),
         "\n\n", sep = "")

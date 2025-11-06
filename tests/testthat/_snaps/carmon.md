@@ -79,7 +79,7 @@
     Code
       print(c_obj)
     Output
-      Carmon network estimated with correlation and selected with .
+      Carmon network estimated with correlation.
       
       The call was:
       carmon(layers = multi_omics, net_method = "correlation", cor_quant = 0.05, 
@@ -112,7 +112,7 @@
     Code
       print(c_obj)
     Output
-      Carmon network estimated with correlation and selected with .
+      Carmon network estimated with correlation.
       
       The call was:
       carmon(layers = multi_omics, net_method = "correlation", cor_quant = 0.05, 

@@ -2,6 +2,7 @@
 "_PACKAGE"
 
 ## usethis namespace: start
+#' @importFrom BiocGenerics as.list
 #' @importFrom coglasso coglasso
 #' @importFrom coglasso stars_coglasso
 #' @importFrom graphics axis
@@ -26,6 +27,8 @@
 #' @importFrom igraph layout_with_fr
 #' @importFrom igraph V
 #' @importFrom Matrix which
+#' @importFrom MultiAssayExperiment assays
+#' @importFrom MultiAssayExperiment intersectColumns
 #' @importFrom rlang call_args
 #' @importFrom stats var
 #' @importFrom utils flush.console

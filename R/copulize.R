@@ -1,19 +1,34 @@
 #' Use copulas to transfer all omics layers to the normal realm
 #'
-#' @param layers The omics layers to analyze. Preferably provided as a named R
-#'   list of \strong{non-normalized} omics data sets. If possible the names of
-#'   the list should correspond to the respective omics type. If not possible,
-#'   for example because of two layers from the same technology, please provide
-#'   the omics types with the parameter `omics`.  To see a list of available
-#'   omics types run the function `which_omics()`.
+#' @param layers The omics layers to analyze. They can be provided in three
+#' possible formats, and they should always contain source-matched,
+#' \strong{non-normalized} data, to use \pkg{carmon} to its full potential.
+#' \itemize{
+#'   \item{} A named R list of omics data sets (\emph{recommended}). If possible
+#'   the names of the list should correspond to the respective omics type. If
+#'   not possible, for example because of two layers from the same technology,
+#'   please provide the omics types with the parameter `omics`. To see a list of
+#'   available omics types use the function `which_omics()`.\cr
 #'   Each data set should be source-matched (same amount of matched samples or
-#'   individuals across each data set). Placing the samples (or individuals)
+#'   individuals across each data set). Placing of the samples (or individuals)
 #'   should also be consistent: either along the rows for \emph{all} the data
 #'   sets, or along the columns for \emph{all} the data sets, nothing in
 #'   between. All the samples (or individuals) should also have consistent
-#'   naming across the data sets.\cr
-#'   `layers` can also be a single unified data set, but then it is necessary to
-#'   specify the argument `p`.
+#'   naming across the data sets.
+#'   \item{} An object of `S4` class `MultiAssayExperiment` (more
+#'   \link[MultiAssayExperiment:MultiAssayExperiment]{here}). In that case, we
+#'   recommend using the `omics` parameter to specify which are the omics layers
+#'   contained in the object, in the same order as presented by
+#'   `MultiAssayExperiment::experiments(layers)`. This allows to use
+#'   \pkg{carmon} to its full potential. To see a list of terms and omics
+#'   technologies for which \pkg{carmon} is specifically tailored, use the
+#'   function `which_omics()`. Please remember that `carmon()` expects data to
+#'   be non-normalized, meaning that for RNA-seq data, for example, it will
+#'   expect data to be in the form of counts.
+#'   \item{} A single unified data set, but then it is
+#'   necessary to specify the argument `p`. We also recommend using the
+#'   `omics` parameter to specify which are the omics layers contained in the
+#'   data set.}
 #' @param p Optional, to be specified only in case layers is a single data set.
 #'   A vector with with the number of variables for each omic layer of the
 #'   data set (e.g. the number of transcripts, metabolites etc.), in the same
@@ -129,7 +144,10 @@ check_formalities <- function(layers, p = NULL, omics, marginals, noninv_method,
     and other formalities....")
         flush.console()
     }
-    if (inherits(layers, "list")) {
+    if (inherits(layers, "MultiAssayExperiment")) {
+        layers <- layers_from_MAE(layers)
+        check_layers_num(layers = layers, omics = omics, marginals = marginals)
+    } else if (inherits(layers, "list")) {
         # Layers match in sample and sample names, and consistent layer number
         layers <- check_layers_dims(layers)
         check_layers_num(layers = layers, omics = omics, marginals = marginals)
@@ -148,7 +166,6 @@ check_formalities <- function(layers, p = NULL, omics, marginals, noninv_method,
             layers <- split_layers(layers, p = p, omics = omics)
         }
     }
-    # Define default parameters
     if (is.null(noninv_method)) noninv_method <- "median"
     if (is.null(copula))        copula <- "gaussian"
     if (is.null(marginals))     marginals <- rep(0, length(layers))
@@ -164,9 +181,8 @@ check_formalities <- function(layers, p = NULL, omics, marginals, noninv_method,
     layers <- check_gen_colnames(layers)
     marginals <- omics2marginals(omics, marginals)
     if (verbose) {
-        message("Done!\n")
-        message("****************Beginning copulization****************")
-            flush.console()
+    message("Done!\n\n****************Beginning copulization****************")
+        flush.console()
     }
     return(list("layers" = layers, "omics" = omics, "marginals" = marginals,
                 "noninv_method" = noninv_method, "copula" = copula))
@@ -184,9 +200,11 @@ check_formalities <- function(layers, p = NULL, omics, marginals, noninv_method,
 omics2marginals <- function(omics, marginals) {
     for (l in seq_len(length(omics))) {
         if (marginals[l] == 0) {
-            if (tolower(omics[l]) %in% c("rna-seq", "rnaseq", "gene counts",
-                        "transcriptomics", "proteomics", "protein fragments",
-                        "protein counts")) {
+            if (tolower(omics[l]) %in% c("rna-seq", "rnaseq", "rna",
+                    "gene counts", "transcriptomics",
+                    "mirna-seq", "mirnaseq", "microrna-seq", "micrornaseq",
+                    "mirna", "microrna",
+                    "proteomics", "protein fragments", "protein counts")) {
                 # Negative Binomial marginal distribution
                 marginals[l] <- "nb"
             # } else if (tolower(omics[l]) %in% c("bs-seq", "bsseq", "wgbs",
